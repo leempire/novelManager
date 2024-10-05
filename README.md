@@ -1,2 +1,2 @@
 # novelManager
-manage your book shelf
+manage your shelf
