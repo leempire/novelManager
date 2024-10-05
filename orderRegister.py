@@ -85,10 +85,3 @@ def cityUpdate():
             shelfManager.getBookPath(book).write(cc)  # 保存
             shelfManager.update()
     return '已全部更新完毕'
-
-
-while True:
-    resp = rootOrder(input())
-    if resp:
-        print(resp)
-        print('\n' + '=' * 50)

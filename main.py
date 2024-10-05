@@ -1,5 +1,7 @@
-from src import FQBug
+from orderRegister import rootOrder
 
-b = FQBug()
-bs = b.search('十日终焉')
-print(bs)
+while True:
+    resp = rootOrder(input())
+    if resp:
+        print(resp)
+        print('\n' + '=' * 50)
