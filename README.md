@@ -62,3 +62,17 @@ python 3.10
 - 方向 ←/→ 切换到上（下）一章
 - 方向 ↓ 快进5秒
 - 空格 暂停/开始
+
+## 使用示例
+在书城中搜索《十日终焉》，将搜索到的第一个结果添加到书架，并下载到最新章节
+```commandline
+city search 十日终焉
+city add 1
+city update
+```
+
+在书架中查找刚刚添加的《十日终焉》，并开启阅读模式（开启后按esc退出）
+```commandline
+shelf search 十日终焉
+shelf read 1
+```
