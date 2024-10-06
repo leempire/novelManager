@@ -5,7 +5,9 @@
 
 python 3.10
 
-`pip install -r requirements.txt`
+```commandline
+pip install -r requirements.txt
+```
 
 命令行运行`python main.py`启动程序
 
@@ -62,6 +64,7 @@ python 3.10
 - 方向 ←/→ 切换到上（下）一章
 - 方向 ↓ 快进5秒
 - 空格 暂停/开始
+- esc 退出阅读模式
 
 ## 使用示例
 在书城中搜索《十日终焉》，将搜索到的第一个结果添加到书架，并下载到最新章节
@@ -75,4 +78,18 @@ city update
 ```commandline
 shelf search 十日终焉
 shelf read 1
+```
+
+将《十日终焉》导出为txt文件，导出后可在 ./data/export/ 文件夹中获取文件
+```commandline
+shelf search 十日终焉
+shelf export 1
+```
+
+将《十日终焉》从书架中移除，然后将刚刚导出的 十日终焉.txt 导入到书架\
+首先将 十日终焉.txt 放入 ./data/import/ 文件夹内，然后执行下面的命令
+```commandline
+shelf search 十日终焉
+shelf remove 1
+shelf add
 ```
