@@ -1,15 +1,35 @@
+# 命令解析、指令注册
+
+
 class OrderAnalyser:
     def __init__(self):
         self.orders = {'help': [self.help, '']}
 
-    def help(self, name=''):
+    def help(self, name='help', *args):
         """帮助文档"""
-        if not name:
-            return 'help [orderName=help]\n 获取orderName的帮助\n 可用指令：{}'.format(', '.join(self.orders.keys()))
+        if not name or name == 'help':  # 默认值，显示所有可用指令
+            return 'help [orderName=help]\n 获取orderName的帮助\n 可用指令：{}'.format(', '.join(self.getAllOrders()))
         elif name in self.orders:
-            return self.orders[name][1]
+            item = self.orders[name]
+            if isinstance(item[0], OrderAnalyser) and args:
+                return item[0].help(*args)
+            else:
+                return item[1]
         else:
-            return '{} 指令不存在\n 可用指令：{}'.format(name, ', '.join(self.orders.keys()))
+            return '{} 指令不存在\n 可用指令：{}'.format(name, ', '.join(self.getAllOrders()))
+
+    def getAllOrders(self):
+        """获取所有可用指令"""
+        orders = []
+        for k, v in self.orders.items():
+            if isinstance(v[0], OrderAnalyser):
+                for o in v[0].getAllOrders():  # 递归
+                    if o == 'help':
+                        continue
+                    orders.append(k + ' ' + o)
+            else:
+                orders.append(k)
+        return orders
 
     def register(self, name, hint=''):
         """将函数注册为指令"""

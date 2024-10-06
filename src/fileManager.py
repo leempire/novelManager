@@ -1,7 +1,17 @@
-# 文件管理
+# 文件管理，支持json格式文件的读写
 import os
 import json
 import shutil
+
+
+def readAndCreate(path, default=None):
+    """读取path中的文件内容，若文件不存在，返回default"""
+    if not isinstance(path, Path):
+        path = Path(path)
+    if not path.exists:
+        return default
+    else:
+        return path.read()
 
 
 class Path:
@@ -16,7 +26,7 @@ class Path:
 
     @property
     def type(self):
-        """文件类型"""
+        """文件类型，目录文件返回'dir'，其他文件返回'.xx'"""
         if os.path.isdir(self.path):
             return 'dir'
         else:
@@ -62,7 +72,7 @@ class Path:
         self.createDir(Path(self.dirname))  # 创建目录
         if self.type == '.json':
             with open(self.path, 'w', encoding=encoding) as f:
-                json.dump(obj, f)
+                json.dump(obj, f, indent=2, ensure_ascii=False)
         else:
             with open(self.path, 'w', encoding=encoding) as f:
                 f.write(obj)
@@ -84,7 +94,6 @@ class Path:
         return name
 
     def remove(self):
-        """删除文件"""
         """删除文件或目录"""
         if not self.exists:
             return

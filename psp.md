@@ -1,6 +1,7 @@
 ![](fig/psp.png)
 
-需求
+## 计划
+**需求：**
 - 书架管理
   - 添加书籍（书名、作者、字数等）
   - 删除书籍
@@ -14,7 +15,36 @@
   - 快捷键操控
   - 实时保存阅读进度
 
-任务
+**时间成本：** 两天
+
+**依赖关系：** Python
+
+## 开发
+
+**指令需求** （后续如有更多的需求可拓展）
+- shelf
+  - `shelf show`
+    - 显示书架中的所有书籍
+  - `shelf add [bookName]`
+    - 将要添加的书籍文件（bookName.txt）放入./data/import/目录下，执行命令后可添加到书架
+  - `shelf search [keywords]`
+    - 书架内关键字查找
+  - `shelf remove [index]`
+    - 删除shelf show或shelf search的结果index对应的书籍
+- city
+  - `city search [keywords]`
+    - 通过爬虫在书城中搜索关键字
+  - `city add [index]`
+    - 将city search的搜索结果的index项添加到书架中
+  - `city update`
+    - 更新书架上所有从书城中添加的书籍
+    - 每更新5章会自动保存，可以随时中断程序
+- `help [order=None]`
+  - 查看order指令的帮助，支持长指令如`help shelf show`
+- `exit`
+  - 退出
+
+**具体设计：**
 - 模块编写
   - 命令解析（预计2h）
     - 将命令及参数传给对应的函数进行处理
@@ -30,25 +60,15 @@
 - 模块组装
   - 使用命令解析注册指令，调用各个模块的接口实现预期功能（预计5h）
 
-提供的指令
-- shelf
-  - show
-    - 显示书架中的所有书籍
-  - search [keywords]
-    - 书架内关键字查找
-  - remove [index]
-    - 删除shelf show或shelf search的结果index对应的书籍
-  - add [bookName]
-    - 将要添加的书籍文件（bookName.txt）放入./data/import/目录下，执行命令后可添加到书架
-- city
-  - search [keywords]
-    - 通过爬虫在书城中搜索关键字
-  - add [index]
-    - 将city search的搜索结果的index项添加到书架中
-  - update
-    - 更新书架上所有从书城中添加的书籍
-    - 每更新5章会自动保存，可以随时中断程序
-- exit
-  - 退出
+**代码规范：** 爬虫模块`src/bug.py`及操作捕获模块`src/record.py`用到之前写的库，使用下划线命名规则；其他部分变量命名使用驼峰规则，使用规范化的排版和注释。
 
-代码规范：课上讲的
+## 记录用时
+需求分析等前期工作2h左右，之后两天左右实现基本功能，后续进行更多测试和功能拓展
+
+## 测试报告
+
+## 计算工作量
+
+## 事后总结
+
+## 提出过程改进计划
