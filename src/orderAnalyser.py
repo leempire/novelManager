@@ -50,7 +50,10 @@ class OrderAnalyser:
         else:
             func = self.orders[orders[0]][0]
             if isinstance(func, OrderAnalyser):
-                return func(' '.join(orders[1:]))
+                try:
+                    return func(' '.join(orders[1:]))
+                except Exception as e:
+                    return '出错了:(\n请自行修复或联系开发者！\n{}'.format(e)
             else:
                 return func(*orders[1:])
 

@@ -26,7 +26,7 @@ class ShelfManager:
         self.shelfPath = self.datapath / 'shelf.json'
         self.shelf = readAndCreate(self.shelfPath, list())
         # 记录上一次显示的结果
-        self.books = []
+        self.books = self.shelf
         # 初始化文件
         self.importPath.createDir()
 
@@ -44,10 +44,19 @@ class ShelfManager:
         if bookName == 'all':
             result = ''
             for file in self.importPath.listdir():
-                result += self.addFromFile(file.filename, author) + '\n'
+                if file.type == '.txt':
+                    try:
+                        result += self.addFromFile(file.filename, author) + '\n'
+                    except Exception as e:
+                        result += '{}文件出错:(\n{}\n'.format(file, e)
             return result
         else:
-            file = self.importPath / (bookName + '.txt')
+            # 判断书籍是否已存在
+            for book in self.shelf:
+                if book['bookName'] == bookName and book['author'] == author:
+                    return '添加失败，书籍已存在：' + self.formatBook(book)
+            # 书籍不存在，正常添加
+            file = self.importPath / (bookName.replace('.txt', '') + '.txt')
             text = file.read().strip()
             chapters = text.split('\n\n')
             book = self.add(bookName, author, len(text), len(chapters), file.path)
@@ -69,7 +78,6 @@ class ShelfManager:
 
     def remove(self, index):
         """将self.books的index项移除"""
-        index = int(index) - 1
         target = self.books[index]
         for i, book in enumerate(self.shelf):
             if target == book:
@@ -89,7 +97,6 @@ class ShelfManager:
                 path.write(novel)
             return self.shelf
         else:
-            index = int(index) - 1
             target = self.books[index]
             novel = self.getBookPath(target).read()
             novel = '\n'.join(novel)
@@ -103,6 +110,18 @@ class ShelfManager:
         results = sorted(results, key=lambda item: item[1], reverse=True)
         self.books = [item[0] for item in results]
         return self.books
+
+    def checkIndex(self, index):
+        """若index为文字，自动完成搜索并返回匹配程度最高的结果；若为str，转换为int并-1"""
+        if index is None:
+            return None
+        elif not index.isdigit():
+            self.search(index)
+            return 0
+        elif type(index) == str:
+            return int(index) - 1
+        else:
+            return index
 
     def getBookPath(self, book):
         """获取book保存的位置"""

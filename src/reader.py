@@ -23,9 +23,10 @@ class Reader:
         """将小说正文加载到缓冲区"""
         self.book = book
         self.novel = self.shelf.getBookChapters(book)
-        self.curChapter = curChapter
+        self.setProgress(curChapter, curWord)
         self.curWord = 0
-        self.pin = curWord
+        if not self.novel:
+            raise ValueError
 
     def setProgress(self, curChapter=None, curWord=None):
         if curChapter is not None:
