@@ -1,5 +1,8 @@
 # 注册指令，每个函数上面的 @... 的第二个参数为函数功能说明
-from src import *
+from src.fqBug import FQBug
+from src.shelfManager import ShelfManager
+from src.reader import AutoReader, htmlReader
+from src.basic.orderAnalyser import OrderAnalyser
 from sys import exit
 import threading
 
@@ -90,7 +93,7 @@ def shelfRead(index, chapter=None):
 def shelfHRead(index, chapter=None):
     index = shelfManager.checkIndex(index)
     book = shelfManager.books[index]
-    htmlReader(book, shelfManager, int(chapter) - 1)
+    htmlReader(book, shelfManager, chapter if chapter is None else int(chapter) - 1)
     return '已打开网页阅读器'
 
 

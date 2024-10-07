@@ -2,6 +2,21 @@
 import os
 import json
 import shutil
+import difflib
+
+
+def sanitizeFilename(filename):
+    """屏蔽文件名中不能出现的字符，将文件名合法化"""
+    illegalChars = ['<', '>', ':', '"', '/', '\\', '|', '?', '*']
+    illegalCharsRep = ['＜', '＞', '：', '＂', '／', '＼', '｜', '？', '＊']
+    for i in range(len(illegalChars)):
+        filename = filename.replace(illegalChars[i], illegalCharsRep[i])
+    return filename
+
+
+def stringSimilar(s1, s2):
+    """字符串s1和s2的匹配程度，结果越大，匹配程度越高"""
+    return difflib.SequenceMatcher(None, s1, s2).quick_ratio()
 
 
 def readAndCreate(path, default=None):

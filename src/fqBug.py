@@ -1,6 +1,6 @@
 # 番茄小说爬虫，参考 https://github.com/ying-ck/fanqienovel-downloader
-from .bug import Bug
-from .fileManager import Path, readAndCreate
+from .basic.bug import Bug
+from .basic.fileManager import Path, readAndCreate
 import random
 import json
 import time

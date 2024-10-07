@@ -28,12 +28,22 @@ pip install -r requirements.txt
 - shelf read 阅读
 
 ## 2024-10-7 V1.2 新增了网页阅读器
+**V1.2.0**
 - shelf hread 使用网页阅读器阅读小说，详情请使用指令 help shelf hread
+
+**V1.2.1**
+- 修复了网页阅读器模板文件缺失的bug
+
+**V1.2.2**
 - 增加报错功能，解决程序异常退出的情况
 - 修复了阅读器中的一些bug
 - 将搜索功能（shelf search, city search）修改为支持空格
 - shelf read, shelf hread, shelf remove, shelf export 现在支持搜索index并将最匹配的结果作为输入了
 - 修复了shelf add会重复添加已添加过的书籍的bug
+
+**V1.2.3**
+- 修复了shelf hread的chapter参数超出合法范围导致无法阅读的bug
+- 调整了项目代码的结构
 
 ## 提供的指令：
 - shelf
@@ -110,22 +120,19 @@ shelf search 十日终焉
 shelf read 1
 # 按esc键退出阅读模式
 
-# 使用html阅读器，阅读搜索到的第一个结果
-shelf hread 1
+# 使用html阅读器，阅读十日终焉
+shelf hread 十日终焉
 ```
 
 书籍导出
 ```commandline
-# 搜索《十日终焉》并导出
-shelf search 十日终焉
-shelf export 1
-# 查看 ./data/export/ 文件夹
+shelf export 十日终焉
+# 查看 ./data/export/ 文件夹，发现刚刚导出的文件 十日终焉.txt
 ```
 
 书架删除
 ```commandline
-shelf search 十日终焉
-shelf remove 1
+shelf remove 十日终焉
 ```
 
 从文件中导入书籍

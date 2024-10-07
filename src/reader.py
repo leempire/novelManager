@@ -1,12 +1,38 @@
 # 小说阅读器，提供暂停、调速、切换章节功能
 import time
 import threading
-from .record import Robot
+from .basic.record import Robot
+import webbrowser
+
+
+def htmlReader(book, shelf, chapter=None):
+    # 获取书名及内容
+    bookName = book['bookName']
+    bookContent = [chap.split('\n') for chap in shelf.getBookChapters(book)]  # [[para1, para2, ...] #chap1, ...]
+    # 获取阅读进度
+    if chapter is None:
+        chapter = book['progress'][0]
+    else:  # 限制章节范围
+        chapter = min(len(bookContent) - 1, chapter)
+        chapter = max(chapter, 0)
+
+    # 读取阅读器模板
+    with open('./html/hreader.html', encoding='utf-8') as f:
+        tmp = f.read()
+    # 渲染模板
+    tmp = tmp.replace('//**novel**//', str(bookContent))
+    tmp = tmp.replace('//**chapter**//', str(chapter))
+    tmp = tmp.replace('//**name**//', bookName)
+
+    path = shelf.exportPath / (bookName + '.html')
+    path.write(tmp)
+    url = 'file://' + str(path).replace('\\', '/')
+    webbrowser.open(url)
 
 
 class Reader:
     def __init__(self, shelf, speed=10, fps=30):
-        self.shelf = shelf
+        self.shelf = shelf  # 书架管理器
         self.book = None
         self.novel = []  # 小说 [chap1, ...]
         # 阅读进度

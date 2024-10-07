@@ -46,7 +46,7 @@ class OrderAnalyser:
         if len(orders) == 0:
             return
         elif orders[0] not in self.orders:
-            return '{} 指令不存在\n 可用指令：{}'.format(orders[0], ', '.join(self.orders.keys()))
+            return '{} 指令不存在\n 可用指令：{}'.format(orders[0], ', '.join(self.getAllOrders()))
         else:
             func = self.orders[orders[0]][0]
             if isinstance(func, OrderAnalyser):
