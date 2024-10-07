@@ -27,6 +27,9 @@ pip install -r requirements.txt
 - shelf export 书籍导出
 - shelf read 阅读
 
+## 2024-10-7 V1.2 新增了网页阅读器
+- shelf hread 使用网页阅读器阅读小说，详情请使用指令 help shelf hread
+
 ## 提供的指令：
 - shelf
   - `shelf show`
@@ -44,6 +47,11 @@ pip install -r requirements.txt
   - `shelf read [index] [chapter=None]`
     - 使用 shelf search/show 后，阅读index项书籍
     - chapter取默认值时为当前阅读进度
+  - `shelf hread [index] [chapter=None]`
+    - 使用shelf search/show 后，使用html阅读index项书籍
+    - html阅读器的阅读进度单独存储，不与novelManager的阅读进度共享
+    - 当novelManager阅读进度发生变化时，使用hread将自动同步到novelManager的进度
+    - 使用hread后将在 ./data/export/ 中产生html文件，下次阅读时可直接打开该文件
 - city
   - `city search [keywords]`
     - 通过爬虫在书城中搜索关键字
@@ -74,10 +82,11 @@ city add 1
 city update
 ```
 
-在书架中查找刚刚添加的《十日终焉》，并开启阅读模式（开启后按esc退出）
+在书架中查找刚刚添加的《十日终焉》，并开启命令行阅读模式，然后按esc退出，并开启网页阅读器
 ```commandline
 shelf search 十日终焉
 shelf read 1
+shelf hread 1
 ```
 
 将《十日终焉》导出为txt文件，导出后可在 ./data/export/ 文件夹中获取文件

@@ -4,3 +4,4 @@ from .shelfManager import ShelfManager
 from .fqBug import FQBug
 from .record import Robot
 from .reader import AutoReader
+from .htmlReader import htmlReader

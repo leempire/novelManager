@@ -96,7 +96,7 @@ class Reader:
 
             # 刷新新的字符
             self.pin += self.speed * dt
-            print(self.novel[self.curChapter][int(self.curWord):int(self.pin)], end='')
+            print(self.novel[self.curChapter][int(self.curWord):int(self.pin)], end='', flush=True)
             self.curWord = self.pin
             # 保存进度
             self.saveProgress()

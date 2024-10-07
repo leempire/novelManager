@@ -75,6 +75,18 @@ def shelfRead(index, chapter=None):
     reader.switch(True)
 
 
+@shelfOrder.register('hread', 'shelf hread [index] [chapter=None]\n'
+                             ' 使用shelf search/show 后，使用html阅读index项书籍\n'
+                             ' html阅读器的阅读进度单独存储，不与novelManager的阅读进度共享\n'
+                             ' 当novelManager阅读进度发生变化时，使用hread将自动同步到novelManager的进度\n'
+                             ' 使用hread后将在 ./data/export/ 中产生html文件，下次阅读时可直接打开该文件')
+def shelfHRead(index, chapter=None):
+    index = int(index) - 1
+    book = shelfManager.books[index]
+    htmlReader(book, shelfManager, chapter)
+    return '已打开网页阅读器'
+
+
 # 书城
 cityOrder = OrderAnalyser()
 rootOrder.register('city', 'city ...\n 书城指令集')(cityOrder)
