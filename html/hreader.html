@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ch-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dory</title>
+    <!-- base.css -->
+    <style>
+        body {
+            font-size: large;
+            height: 99%;
+            background-color: #fff;
+            color: #0d141e;
+        }
+
+        button {
+            color: #0097ff;
+            background-image: none;
+            background-color: rgba(0, 0, 0, 0);
+            border-style: none;
+            font-size: large;
+            font-weight: bolder;
+        }
+
+        nav {
+            margin-top: 10px;
+            margin-bottom: 10px;
+            padding-left: 10px;
+        }
+
+        nav a {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        html {
+            height: 99%;
+        }
+
+        a {
+            color: #0d141e;
+            text-decoration: none;
+        }
+
+        a:hover {
+            color: #0d141e;
+            background-color: rgb(231, 240, 248);
+        }
+
+        .hover:hover {
+            background-color: rgb(231, 240, 248);
+        }
+
+        .chapter {
+            white-space: nowrap;
+            overflow: auto;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            border-bottom-color: rgba(0, 0, 0, 0.2);
+            margin: 0;
+            padding-top: 15px;
+            padding-bottom: 15px;
+            padding-left: 20px;
+        }
+
+        .chapter::-webkit-scrollbar {
+            height: 0;
+            width: 0;
+        }
+    </style>
+    <!-- reader.css -->
+    <style>
+        .line {
+            text-indent: 2em;
+            line-height: 1.8em;
+        }
+
+        #content {
+            padding: 20px;
+        }
+
+        .switch {
+            text-align: center;
+        }
+
+        .ml {
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+
+        button {
+            background-image: none;
+            background-color: rgba(0, 0, 0, 0);
+            border-style: none;
+            font-size: large;
+            font-weight: bolder;
+        }
+
+        #bottom {
+            height: 400px;
+            text-align: center;
+        }
+
+        #bottom h4 {
+            margin-top: 50px;
+        }
+
+        #bottomInfo {
+            text-align: center;
+        }
+
+        #autoRead {
+            white-space: nowrap;
+            opacity: 0.5;
+            text-align: center;
+            position: fixed;
+            bottom: 5%;
+            width: 100%;
+        }
+
+        #autoRead button {
+            text-align: center;
+            margin-left: 5px;
+            margin-right: 5px;
+            background-color: greenyellow;
+            border: 1px black solid;
+        }
+
+        .autoReadStart {
+            width: 2.6em;
+            height: 2.6em;
+            border-radius: 1.3em;
+        }
+
+        .autoReadAdjust {
+            height: 1.5em;
+            width: 2em;
+            border-radius: 5px;
+        }
+    </style>
+    <!-- style.css -->
+    <style>
+        body {
+            background-color: #FFF2E2;
+            color: #0d141e;
+        }
+
+        a {
+            color: #0d141e;
+        }
+
+        a:hover {
+            color: #0d141e;
+            background-color: rgb(231, 240, 248);
+        }
+
+        .hover:hover {
+            background-color: rgb(231, 240, 248);
+        }
+
+        title {
+            color: #0d141e;
+        }
+    </style>
+    <!-- ./reader.js -->
+    <script>
+        novel = //**novel**//;
+            bookName = '//**name**//';
+
+        function jumpToProcess() {
+            var chapter = getItem('chapter') || //**chapter**//;
+                chapter = parseInt(chapter);
+            getText(chapter);
+            var height = getItem('scroll') || 0;
+            height = parseInt(height);
+            scrollTo({
+                top: height,
+                behavior: 'smooth'
+            });
+        }
+
+        function getText(chapter) {
+            if (chapter >= novel.length || chapter < 0) { return };
+            setItem('chapter', chapter);
+            chapter = novel[chapter];
+            document.getElementById('title').innerHTML = chapter[0];
+            var txt = '';
+            for (var i = 1; i < chapter.length; i++) {
+                txt += '<div class="line">' + chapter[i] + '</div>';
+            };
+            document.getElementById('content').innerHTML = txt;
+        };
+
+        function record() {
+            setItem('scroll', window.scrollY);
+            if (window.innerHeight * 1.1 < document.body.scrollHeight) {
+                console.log(window.scrollY + window.innerHeight >= document.body.scrollHeight)
+                if (window.scrollY + window.innerHeight >= document.body.scrollHeight) {
+                    setTimeout(function () { if (window.scrollY + window.innerHeight >= document.body.scrollHeight) { switchChapter(1) } }, 1000)
+                };
+            };
+        };
+
+        function switchChapter(page) {
+            getText(parseInt(getItem('chapter')) + page);
+            scrollTo({
+                top: 0
+            });
+        };
+
+        function getItem(key) {
+            var data = localStorage.getItem(bookName);
+            if (!data) {
+                data = {
+                    'chapter': //**chapter**//,
+                    'scroll': 0,
+                    'initChapter': //**chapter**//
+                };
+                localStorage.setItem(bookName, JSON.stringify(data));
+                return (data[key])
+            }
+            data = JSON.parse(data);
+            if (data['initChapter'] != //**chapter**//) {
+                data = {
+                    'chapter': //**chapter**//,
+                    'scroll': 0,
+                    'initChapter': //**chapter**//
+                };
+                localStorage.setItem(bookName, JSON.stringify(data));
+                return (data[key])
+            }
+            return (data[key])
+        }
+
+        function setItem(key, value) {
+            data = localStorage.getItem(bookName);
+            data = JSON.parse(data);
+            data[key] = value;
+            localStorage.setItem(bookName, JSON.stringify(data));
+        }
+
+        onload = jumpToProcess;
+        onscroll = record;
+    </script>
+</head>
+
+<body>
+    <div class="switch">
+        <button onclick="switchChapter(-1)">上一章</button>
+        <button onclick="swtichToContent()" class="ml">目录</button>
+        <button onclick="switchChapter(1)">下一章</button>
+    </div>
+    <div>
+        <h1 id="title"></h1>
+    </div>
+    <div id="content" onfocus="recording()"></div>
+    <div class="switch">
+        <button onclick="switchChapter(-1)">上一章</button>
+        <button onclick="swtichToContent()" class="ml">目录</button>
+        <button onclick="switchChapter(1)">下一章</button>
+    </div>
+    <div id="bottom">
+        <h4>滑动到底部一秒后自动跳转下一章</h4>
+    </div>
+    <div id="bottomInfo">
+        <h4>一秒后跳转下一章</h4>
+    </div>
+</body>
+
+</html>
