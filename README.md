@@ -45,6 +45,13 @@ pip install -r requirements.txt
 - 修复了shelf hread的chapter参数超出合法范围导致无法阅读的bug
 - 调整了项目代码的结构
 
+## 2024-10-8 V1.3 新增了设置功能
+**V1.3.0**
+- 新增set 修改设置，可修改默认阅读速度和是否自动清空命令行
+- 优化了结果输出格式
+- 修复了 city add 可重复添加已添加过的书籍的bug
+- 将shelf下的部分二级指令改为一级指令，详情使用help查看可用指令
+
 ## 提供的指令：
 - shelf
   - `shelf show`
@@ -58,20 +65,6 @@ pip install -r requirements.txt
   - `shelf remove [index]`
     - 使用shelf search/show后，在书架中删除index项
     - 当index非数字时，使用搜索到匹配程度最高的结果作为目标
-  - `shelf export [index=None]`
-    - 使用 shelf search/show 后，将index项导出到 ./data/export/ 文件夹
-    - 当index非数字时，使用搜索到匹配程度最高的结果作为目标
-    - index取默认值时导出全部书籍
-  - `shelf read [index] [chapter=None]`
-    - 使用 shelf search/show 后，阅读index项书籍
-    - 当index非数字时，使用搜索到匹配程度最高的结果作为目标
-    - chapter取默认值时为当前阅读进度
-  - `shelf hread [index] [chapter=None]`
-    - 使用shelf search/show 后，使用html阅读index项书籍
-    - 当index非数字时，使用搜索到匹配程度最高的结果作为目标
-    - html阅读器的阅读进度单独存储，不与novelManager的阅读进度共享
-    - 当novelManager阅读进度发生变化时，使用hread将自动同步到novelManager的进度
-    - 使用hread后将在 ./data/export/ 中产生html文件，下次阅读时可直接打开该文件
 - city
   - `city search [keywords]`
     - 通过爬虫在书城中搜索关键字
@@ -81,8 +74,26 @@ pip install -r requirements.txt
   - `city update`
     - 更新书架上所有从书城中添加的书籍
     - 每更新5章会自动保存，可以随时中断程序
+- `set [key] [value]`
+  - 修改默认设置，支持以下设置项
+  - readSpeed: float 命令行阅读器阅读速度（字/秒）
+  - autoCls: 0/1 是否开启命令行自动刷新
 - `help [orderName=help]`
   - 查看orderName指令的帮助，支持长指令如`help shelf show`
+- `read [index] [chapter=None]`
+  - 使用 shelf search/show 后，阅读index项书籍
+  - 当index非数字时，使用搜索到匹配程度最高的结果作为目标
+  - chapter取默认值时为当前阅读进度
+- `hread [index] [chapter=None]`
+  - 使用shelf search/show 后，使用html阅读index项书籍
+  - 当index非数字时，使用搜索到匹配程度最高的结果作为目标
+  - html阅读器的阅读进度单独存储，不与novelManager的阅读进度共享
+  - 当novelManager阅读进度发生变化时，使用hread将自动同步到novelManager的进度
+  - 使用hread后将在 ./data/export/ 中产生html文件，下次阅读时可直接打开该文件
+- `export [index=None]`
+  - 使用 shelf search/show 后，将index项导出到 ./data/export/ 文件夹
+  - 当index非数字时，使用搜索到匹配程度最高的结果作为目标
+  - index取默认值时导出全部书籍
 - `exit`
   - 安全退出程序
 
@@ -117,16 +128,16 @@ shelf show
 shelf search 十日终焉
 
 # 使用命令行阅读器，阅读搜索到的第一个结果
-shelf read 1
+read 1
 # 按esc键退出阅读模式
 
 # 使用html阅读器，阅读十日终焉
-shelf hread 十日终焉
+hread 十日终焉
 ```
 
 书籍导出
 ```commandline
-shelf export 十日终焉
+export 十日终焉
 # 查看 ./data/export/ 文件夹，发现刚刚导出的文件 十日终焉.txt
 ```
 

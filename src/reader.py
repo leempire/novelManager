@@ -31,7 +31,10 @@ def htmlReader(book, shelf, chapter=None):
 
 
 class Reader:
-    def __init__(self, shelf, speed=10, fps=30):
+    speed = 10  # 阅读速度每秒多少字
+    fps = 30  # 帧率
+
+    def __init__(self, shelf):
         self.shelf = shelf  # 书架管理器
         self.book = None
         self.novel = []  # 小说 [chap1, ...]
@@ -40,8 +43,6 @@ class Reader:
         self.curWord = 0
 
         self.reading = False  # 正在阅读
-        self.speed = speed  # 阅读速度每秒多少字
-        self.fps = fps  # 帧率
         self.pin = 0
         threading.Thread(target=self.thread, daemon=True).start()
 
@@ -108,13 +109,10 @@ class Reader:
         t0 = time.time()
         while True:
             # 限制帧率
-            t = time.time()  # 上一次循环的结束时间
+            t = time.time()  # t0为上次循环开始时间，t为这次循环开始时间
             dt = t - t0  # 上一次循环的总时间
-            delta = 1 / self.fps - dt
-            if delta > 0:
-                time.sleep(delta)  # 限制帧率
-                dt = 1 / self.fps
-            t0 = time.time()  # 这一次循环的开始时间
+            t0 = t
+            time.sleep(1 / self.fps)  # 限制帧率
             # dt为间隔时间
 
             # 暂停中

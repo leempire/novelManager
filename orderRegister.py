@@ -1,4 +1,5 @@
 # 注册指令，每个函数上面的 @... 的第二个参数为函数功能说明
+from src.setting import Setting
 from src.fqBug import FQBug
 from src.shelfManager import ShelfManager
 from src.reader import AutoReader, htmlReader
@@ -7,8 +8,25 @@ from sys import exit
 import threading
 
 
+# 指令解析
 rootOrder = OrderAnalyser()
 rootOrder.register('exit', '退出')(exit)
+
+# 修改设置
+setting = Setting()
+
+
+@rootOrder.register('set', 'set [key] [value]\n'
+                               ' 修改默认设置，支持以下设置项\n'
+                               ' readSpeed: float 命令行阅读器阅读速度（字/秒）\n'
+                               ' autoCls: 0/1 是否开启命令行自动刷新')
+def set(key, value):
+    if key in setting:
+        p, n = setting.set(key, value)
+        return '已将 {} 项从 {} 修改为 {}'.format(key, p, n)
+    else:
+        return '{} 项不存在'.format(key)
+
 
 # 书架
 shelfOrder = OrderAnalyser()
@@ -71,7 +89,7 @@ def shelfExport(index=None):
     return result
 
 
-@shelfOrder.register('read', 'shelf read [index] [chapter=None]\n'
+@rootOrder.register('read', 'read [index] [chapter=None]\n'
                              ' 使用shelf search/show 后，阅读index项书籍\n'
                              ' chapter取默认值时为当前阅读进度\n'
                              ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
@@ -80,11 +98,11 @@ def shelfRead(index, chapter=None):
     book = shelfManager.books[index]
     progress = book['progress'] if chapter is None else [int(chapter) - 1, 0]  # 阅读进度
     reader.loadNovel(book, *progress)
-
     reader.switch(True)
+    return '已开启命令行阅读模式'
 
 
-@shelfOrder.register('hread', 'shelf hread [index] [chapter=None]\n'
+@rootOrder.register('hread', 'hread [index] [chapter=None]\n'
                              ' 使用shelf search/show 后，使用html阅读index项书籍\n'
                              ' html阅读器的阅读进度单独存储，不与novelManager的阅读进度共享\n'
                              ' 当novelManager阅读进度发生变化时，使用hread将自动同步到novelManager的进度\n'

@@ -50,6 +50,10 @@ class ShelfManager:
 
     def addFromCity(self, book):
         """从city的搜索结果中添加书籍"""
+        # 判断书籍是否已存在
+        for b in self.shelf:
+            if book['bookName'] == b['bookName'] and book['author'] == b['author']:
+                return '添加失败，书籍已存在：' + self.formatBook(book)
         book = self.add(book['bookName'], book['author'], 0, 0, book['bookId'])
         return '已添加：' + self.formatBook(book)
 
