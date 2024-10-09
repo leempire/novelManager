@@ -139,6 +139,7 @@ city add 1
 city update
 # 每更新五章会自动保存，更新过程中可以随时关闭程序
 ```
+![](./fig/cityDemo.png)
 
 **2. 查看书架并阅读书架中的书籍**
 ```commandline
@@ -152,6 +153,7 @@ read 1
 # 使用html阅读器，阅读十日终焉
 hread 十日终焉
 ```
+![](./fig/shelfDemo.gif)
 
 **3. 书籍导出**
 ```commandline
