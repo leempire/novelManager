@@ -16,109 +16,144 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
     在命令行中运行`python main.py`即可启动程序。
 
 ## 三、版本更新记录
-1. **版本 1.0.0（2024-10-5）**
-   - 实现书架管理及书城爬虫功能。
-     - `shelf show`：显示书架中的所有书籍。
-     - `shelf add`：支持将要添加的书籍文件（bookName.txt）放入`./data/import/`目录下进行添加，当`bookName=all`时，可将该目录下所有文件添加到书架。 
-     - `shelf search`：用于书架内关键字查找。 
-     - `shelf remove`：在使用`shelf search/show`后，可根据索引删除书架中的书籍。 
-     - `city search`：通过爬虫在书城中搜索关键字。 
-     - `city add`：将书城搜索结果序号对应的书籍添加到书架。 
-     - `city update`：更新书架上所有从书城中添加的书籍，每更新 5 章会自动保存，可随时中断程序。 
-     - `help`：查看指令帮助。 
-     - `exit`：安全退出程序。
-2. **版本 1.1.0（2024-10-6）**
-   - 更新阅读功能。
-   - 修复了书城爬虫无法爬到完整内容的 bug。 
-   - 新增`shelf export`：用于书籍导出。 
-   - 新增`shelf read`：用于阅读书籍。
-3. **版本 1.2.0（2024-10-7）**
-   - 新增网页阅读器相关功能。 
-     - 新增`shelf hread`：使用网页阅读器阅读小说，可通过`help shelf hread`查看详细帮助。
-4. **版本 1.2.1（2024-10-7）**
-   - 修复网页阅读器模板文件缺失的 bug。
-5. **版本 1.2.2（2024-10-7）**
-   - 增强程序稳定性和功能完善。 
-   - 增加报错功能，解决程序异常退出的情况。 
-   - 修复了阅读器中的一些 bug。 
-   - 将搜索功能（`shelf search`，`city search`）修改为支持空格。 
-   - `shelf read`、`shelf hread`、`shelf remove`、`shelf export`现在支持搜索索引并将最匹配的结果作为输入。 
-   - 修复了`shelf add`会重复添加已添加过的书籍的 bug。
-6. **版本 1.2.3（2024-10-7）**
-   - 修复阅读器相关 bug 和优化代码结构。
-   - 修复了`shelf hread`的`chapter`参数超出合法范围导致无法阅读的 bug。
-   - 调整了项目代码的结构。
-7. **版本 1.3.0（2024-10-8）**
-   - 新增设置功能和优化其他功能。
-   - 新增`set`指令，可修改默认阅读速度和是否自动清空命令行。
-   - 优化了结果输出格式。
-   - 修复了`city add`可重复添加已添加过的书籍的 bug。
-   - 将`shelf`下的部分二级指令改为一级指令，可通过`help`查看可用指令。
-8. **版本 1.3.1（2024-10-9）**
-   - 在`set`指令中增加`hReadTemplate`项，用来更换html阅读器模板。
-   - 新增ai生成的html小说阅读器模板，使用`set hReadTemplate aiHreader`更换模板。
-   - 修复了书城爬虫对特殊字符 '\r' 的处理
+<details>
+<summary>V 1.0</summary>
+
+**版本 1.0.0（2024-10-5）**
+- 实现书架管理及书城爬虫功能。
+  - `shelf show`：显示书架中的所有书籍。
+  - `shelf add`：支持将要添加的书籍文件（bookName.txt）放入`./data/import/`目录下进行添加，当`bookName=all`时，可将该目录下所有文件添加到书架。 
+  - `shelf search`：用于书架内关键字查找。 
+  - `shelf remove`：在使用`shelf search/show`后，可根据索引删除书架中的书籍。 
+  - `city search`：通过爬虫在书城中搜索关键字。 
+  - `city add`：将书城搜索结果序号对应的书籍添加到书架。 
+  - `city update`：更新书架上所有从书城中添加的书籍，每更新 5 章会自动保存，可随时中断程序。 
+  - `help`：查看指令帮助。 
+  - `exit`：安全退出程序。
+</details>
+
+<details>
+
+<summary>V 1.1</summary>
+
+**版本 1.1.0（2024-10-6）**
+- 更新阅读功能。
+- 修复了书城爬虫无法爬到完整内容的 bug。 
+- 新增`shelf export`：用于书籍导出。 
+- 新增`shelf read`：用于阅读书籍。
+</details>
+
+<details>
+<summary>V 1.2</summary>
+
+**版本 1.2.0（2024-10-7）**
+- 新增网页阅读器相关功能。 
+ - 新增`shelf hread`：使用网页阅读器阅读小说，可通过`help shelf hread`查看详细帮助。
+**版本 1.2.1（2024-10-7）**
+- 修复网页阅读器模板文件缺失的 bug。
+**版本 1.2.2（2024-10-7）**
+- 增强程序稳定性和功能完善。 
+- 增加报错功能，解决程序异常退出的情况。 
+- 修复了阅读器中的一些 bug。 
+- 将搜索功能（`shelf search`，`city search`）修改为支持空格。 
+- `shelf read`、`shelf hread`、`shelf remove`、`shelf export`现在支持搜索索引并将最匹配的结果作为输入。 
+- 修复了`shelf add`会重复添加已添加过的书籍的 bug。
+**版本 1.2.3（2024-10-7）**
+- 修复阅读器相关 bug 和优化代码结构。
+- 修复了`shelf hread`的`chapter`参数超出合法范围导致无法阅读的 bug。
+- 调整了项目代码的结构。
+</details>
+
+<details>
+<summary>V 1.3</summary>
+
+**版本 1.3.0（2024-10-8）**
+- 新增设置功能和优化其他功能。
+- 新增`set`指令，可修改默认阅读速度和是否自动清空命令行。
+- 优化了结果输出格式。
+- 修复了`city add`可重复添加已添加过的书籍的 bug。
+- 将`shelf`下的部分二级指令改为一级指令，可通过`help`查看可用指令。
+**版本 1.3.1（2024-10-9）**
+- 在`set`指令中增加`hReadTemplate`项，用来更换html阅读器模板。
+- 新增ai生成的html小说阅读器模板，使用`set hReadTemplate aiHreader`更换模板。
+- 修复了书城爬虫对特殊字符 '\r' 的处理
+</details>
 
 ## 四、指令详细介绍
-- **shelf 指令集** 
-  - `shelf show `
-    - 功能：显示书架中的所有书籍。
-  - `shelf add [bookName=all] [author=匿名]`
-    - 功能：将书籍添加到书架。 
-    - 参数说明：
-      - `bookName`：要添加的书籍文件名（需将文件放入`./data/import/`目录下），当`bookName=all`时，添加该目录下所有文件。
-      - `author`：默认为匿名。
-  - `shelf search [keywords]`
-    - 功能：在书架内进行关键字查找。
-    - 参数说明：`keywords`支持空格。
-  - `shelf remove [index]`
-    - 功能：从书架中删除书籍。 
-    - 参数说明：
-      - 使用`shelf search/show`后，根据`index`删除对应书籍。
-      - 当`index`非数字时，使用搜索到匹配程度最高的结果作为目标。
-- **city 指令集**
-  - `city search [keywords]`
-    - 功能：在书城中进行关键字搜索。
-    - 参数说明：`keywords`支持空格。
-  - `city add [index]`
-    - 功能：将书城搜索结果序号对应的书籍添加到书架。
-    - 参数说明：`index`为书城搜索结果的序号。
-  - `city update`
-    - 功能：更新书架上所有从书城中添加的书籍。
-    - 说明：每更新 5 章会自动保存，可以随时中断程序。
-- **其他指令**
-  - `set [key] [value]`
-    - 功能：修改默认设置。
-    - 参数说明：
-      - `key`：设置项，包括以下内容：
-        - `readSpeed`（命令行阅读器阅读速度，单位为字 / 秒）
-        - `autoCls`（是否开启命令行自动刷新，0 为关闭，1 为开启）。
-        - `hReadTemplate`: html阅读器模板，输入`./html/`文件夹下的文件名
-      - `value`：对应设置项的值。
-  - `help [orderName=help]`
-    - 功能：查看`orderName`指令的帮助，支持长指令如`help shelf show`。
-  - `read [index] [chapter=None]`
-    - 功能：阅读书籍。
-    - 参数说明：
-      - 使用`shelf search/show`后，根据`index`阅读对应书籍。
-      - 当`index`非数字时，使用搜索到匹配程度最高的结果作为目标。
-      - `chapter`：默认为当前阅读进度。
-  - `hread [index] [chapter=None]`
-    - 功能：使用网页阅读器阅读书籍。
-    - 参数说明：
-      - 使用`shelf search/show`后，根据`index`阅读对应书籍。
-      - 当`index`非数字时，使用搜索到匹配程度最高的结果作为目标。
-      - `chapter`：默认为当前阅读进度。
-      - 网页阅读器的阅读进度单独存储，不与 novelManager 的阅读进度共享，但当 novelManager 阅读进度发生变化时，会自动同步到 novelManager 的进度。
-      - 使用`hread`后将在`./data/export/`中产生`xx.html`文件，下次阅读时可直接打开该文件。 
-  - `export [index=None]`
-    - 功能：导出书籍。
-    - 参数说明：
-      - 使用`shelf search/show`后，根据`index`导出对应书籍。
-      - 当`index`非数字时，使用搜索到匹配程度最高的结果作为目标。
-      - 当`index`为默认值时，导出全部书籍。
-  - `exit`
-    - 功能：安全退出程序。
+<details>
+<summary>shelf 指令集</summary>
+
+**shelf 指令集** 
+- `shelf show `
+  - 功能：显示书架中的所有书籍。
+- `shelf add [bookName=all] [author=匿名]`
+  - 功能：将书籍添加到书架。 
+  - 参数说明：
+    - `bookName`：要添加的书籍文件名（需将文件放入`./data/import/`目录下），当`bookName=all`时，添加该目录下所有文件。
+    - `author`：默认为匿名。
+- `shelf search [keywords]`
+  - 功能：在书架内进行关键字查找。
+  - 参数说明：`keywords`支持空格。
+- `shelf remove [index]`
+  - 功能：从书架中删除书籍。 
+  - 参数说明：
+    - 使用`shelf search/show`后，根据`index`删除对应书籍。
+    - 当`index`非数字时，使用搜索到匹配程度最高的结果作为目标。
+
+</details>
+
+<details>
+<summary>city 指令集</summary>
+
+**city 指令集**
+- `city search [keywords]`
+  - 功能：在书城中进行关键字搜索。
+  - 参数说明：`keywords`支持空格。
+- `city add [index]`
+  - 功能：将书城搜索结果序号对应的书籍添加到书架。
+  - 参数说明：`index`为书城搜索结果的序号。
+- `city update`
+  - 功能：更新书架上所有从书城中添加的书籍。
+  - 说明：每更新 5 章会自动保存，可以随时中断程序。
+</details>
+
+<details>
+<summary>其他指令</summary>
+
+**其他指令**
+- `set [key] [value]`
+  - 功能：修改默认设置。
+  - 参数说明：
+    - `key`：设置项，包括以下内容：
+      - `readSpeed`（命令行阅读器阅读速度，单位为字 / 秒）
+      - `autoCls`（是否开启命令行自动刷新，0 为关闭，1 为开启）。
+      - `hReadTemplate`: html阅读器模板，输入`./html/`文件夹下的文件名
+    - `value`：对应设置项的值。
+- `help [orderName=help]`
+  - 功能：查看`orderName`指令的帮助，支持长指令如`help shelf show`。
+- `read [index] [chapter=None]`
+  - 功能：阅读书籍。
+  - 参数说明：
+    - 使用`shelf search/show`后，根据`index`阅读对应书籍。
+    - 当`index`非数字时，使用搜索到匹配程度最高的结果作为目标。
+    - `chapter`：默认为当前阅读进度。
+- `hread [index] [chapter=None]`
+  - 功能：使用网页阅读器阅读书籍。
+  - 参数说明：
+    - 使用`shelf search/show`后，根据`index`阅读对应书籍。
+    - 当`index`非数字时，使用搜索到匹配程度最高的结果作为目标。
+    - `chapter`：默认为当前阅读进度。
+    - 网页阅读器的阅读进度单独存储，不与 novelManager 的阅读进度共享，但当 novelManager 阅读进度发生变化时，会自动同步到 novelManager 的进度。
+    - 使用`hread`后将在`./data/export/`中产生`xx.html`文件，下次阅读时可直接打开该文件。 
+- `export [index=None]`
+  - 功能：导出书籍。
+  - 参数说明：
+    - 使用`shelf search/show`后，根据`index`导出对应书籍。
+    - 当`index`非数字时，使用搜索到匹配程度最高的结果作为目标。
+    - 当`index`为默认值时，导出全部书籍。
+- `exit`
+  - 功能：安全退出程序。
+</details>
 
 ## 五、命令行阅读器操作说明
 使用`shelf read`指令进入阅读状态后，可使用以下快捷键进行操作： 
