@@ -154,6 +154,7 @@ read 1
 hread 十日终焉
 ```
 ![](./fig/shelfDemo.gif)
+![hread界面](./fig/hreadDemo.png)
 
 **3. 书籍导出**
 ```commandline
