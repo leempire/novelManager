@@ -57,6 +57,7 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 8. **版本 1.3.1（2024-10-9）**
    - 在`set`指令中增加`hReadTemplate`项，用来更换html阅读器模板。
    - 新增ai生成的html小说阅读器模板，使用`set hReadTemplate aiHreader`更换模板。
+   - 修复了书城爬虫对特殊字符 '\r' 的处理
 
 ## 四、指令详细介绍
 - **shelf 指令集** 
