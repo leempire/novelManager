@@ -54,6 +54,9 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
    - 优化了结果输出格式。
    - 修复了`city add`可重复添加已添加过的书籍的 bug。
    - 将`shelf`下的部分二级指令改为一级指令，可通过`help`查看可用指令。
+8. **版本 1.3.1（2024-10-9）**
+   - 在`set`指令中增加`hReadTemplate`项，用来更换html阅读器模板。
+   - 新增ai生成的html小说阅读器模板，使用`set hReadTemplate aiHreader`更换模板。
 
 ## 四、指令详细介绍
 - **shelf 指令集** 
@@ -88,7 +91,8 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
     - 参数说明：
       - `key`：设置项，包括以下内容：
         - `readSpeed`（命令行阅读器阅读速度，单位为字 / 秒）
-        - `autoCls`（是否开启命令行自动刷新，0 为关闭，1 为开启）。 
+        - `autoCls`（是否开启命令行自动刷新，0 为关闭，1 为开启）。
+        - `hReadTemplate`: html阅读器模板，输入`./html/`文件夹下的文件名
       - `value`：对应设置项的值。
   - `help [orderName=help]`
     - 功能：查看`orderName`指令的帮助，支持长指令如`help shelf show`。

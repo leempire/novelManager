@@ -3,31 +3,26 @@ import time
 import threading
 from .basic.record import Robot
 import webbrowser
+import os
 
 
-def htmlReader(book, shelf, chapter=None):
-    # 获取书名及内容
-    bookName = book['bookName']
-    bookContent = [chap.split('\n') for chap in shelf.getBookChapters(book)]  # [[para1, para2, ...] #chap1, ...]
-    # 获取阅读进度
-    if chapter is None:
-        chapter = book['progress'][0]
-    else:  # 限制章节范围
-        chapter = min(len(bookContent) - 1, chapter)
-        chapter = max(chapter, 0)
-
+def htmlReader(bookName, bookContent, chapter, exportPath, template='hreader'):
+    """生成html阅读器"""
     # 读取阅读器模板
-    with open('./html/hreader.html', encoding='utf-8') as f:
+    template = './html/{}.html'.format(template.replace('.html', ''))
+    if not os.path.exists(template):
+        return '模板文件 {} 缺失，请检查'.format(template)
+    with open(template, encoding='utf-8') as f:
         tmp = f.read()
     # 渲染模板
     tmp = tmp.replace('//**novel**//', str(bookContent))
     tmp = tmp.replace('//**chapter**//', str(chapter))
     tmp = tmp.replace('//**name**//', bookName)
 
-    path = shelf.exportPath / (bookName + '.html')
-    path.write(tmp)
-    url = 'file://' + str(path).replace('\\', '/')
+    exportPath.write(tmp)
+    url = 'file://' + str(exportPath).replace('\\', '/')
     webbrowser.open(url)
+    return '已打开网页阅读器'
 
 
 class Reader:

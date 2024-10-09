@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>//**name**//</title>
+  <style>
+    /* 整体背景颜色 */
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.8;
+      /* 增加行距 */
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #f5f5f5;
+      /* 柔和的背景色 */
+      overflow-y: scroll;
+    }
+
+    /* 章节标题样式 */
+    .chapter-title {
+      font-size: 22px;
+      /* 增大章节标题字体 */
+      font-weight: bold;
+      color: #007BFF;
+      margin-bottom: 15px;
+      padding-left: 20px;
+      /* 增加左内边距 */
+      padding-right: 20px;
+      /* 增加右内边距 */
+    }
+
+    /* 内容段落样式 */
+    .content-area p {
+      font-size: 18px;
+      /* 合适的正文字体大小 */
+      color: #333;
+      /* 正文颜色 */
+      padding-left: 20px;
+      /* 增加左内边距 */
+      padding-right: 20px;
+      /* 增加右内边距 */
+    }
+
+    /* 按钮组样式 */
+    .button-group {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      justify-content: space-between;
+      width: 80%;
+      max-width: 400px;
+    }
+
+    .button-group button {
+      padding: 10px 20px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .button-group button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    /* 章节目录样式 */
+    .chapter-list {
+      margin: 20px;
+      padding: 0;
+      list-style-type: none;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+      position: absolute;
+      top: 60px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80%;
+      background-color: #fff;
+      box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .chapter-list li {
+      cursor: pointer;
+      padding: 8px 0;
+      /* 增加章节列表项内边距 */
+      padding-left: 20px;
+      /* 增加左内边距 */
+      padding-right: 20px;
+      /* 增加右内边距 */
+    }
+
+    .chapter-list li:hover {
+      background-color: #f0f0f0;
+    }
+
+    .chapter-list li.active-chapter {
+      background-color: #007BFF;
+      color: white;
+    }
+    
+  </style>
+</head>
+
+<body>
+
+  <!-- 小说内容显示区域 -->
+  <div class="content-area" id="content-area"></div>
+
+  <!-- 按钮组 -->
+  <div class="button-group">
+    <button id="prev-chapter-btn" disabled>上一章</button>
+    <button id="toc-btn">目录</button>
+    <button id="next-chapter-btn">下一章</button>
+  </div>
+
+  <!-- 章节目录 -->
+  <ul class="chapter-list" id="chapter-list"></ul>
+
+  <script>
+    // 模拟小说数据，使用新的格式 [[章节1第一段，章节1第二段，...],...]
+    const novels = //**novel**//;
+    const bookName = "//**name**//";
+    let showTOC = false;
+    // 读取阅读进度
+    let data = JSON.parse(localStorage.getItem(bookName));
+    if (!data || data['initChapter'] != //**chapter**//) {
+      // 重新初始化
+      console.log('reload')
+      data = {'chapter': //**chapter**//, 'initChapter': //**chapter**//};
+    }
+
+    window.onload = function () {
+      // 生成章节列表
+      const chapterList = document.getElementById('chapter-list');
+      novels.forEach((chapter, index) => {
+        const firstParagraph = chapter.length > 0 ? chapter[0] : "无内容";
+        const li = document.createElement('li');
+        li.innerText = `第${index + 1}章：${firstParagraph}`;
+        li.onclick = function () {
+          showChapter(index);
+          showTOC = false;
+          updateTOCVisibility();
+        };
+        if (index === data['chapter']) {
+          li.classList.add('active-chapter');
+        } else {
+          li.classList.remove('active-chapter');
+        }
+        chapterList.appendChild(li);
+      });
+
+      // 显示当前章节内容
+      showChapter(data['chapter']);
+
+      // 初始化按钮状态
+      updateButtonStates();
+    };
+
+    function showChapter(index) {
+      const contentArea = document.getElementById('content-area');
+      const chapter = novels[index];
+      const chapterTitle = chapter[0];
+      const chapterContent = chapter.slice(1);
+      const titleElement = document.createElement('h2');
+      titleElement.className = 'chapter-title';
+      titleElement.innerText = chapterTitle;
+      contentArea.innerHTML = '';
+      contentArea.appendChild(titleElement);
+      // 将章节内容的每一段逐个添加为段落
+      chapterContent.forEach(paragraph => {
+        const contentElement = document.createElement('p');
+        contentElement.innerText = paragraph;
+        contentArea.appendChild(contentElement);
+      });
+      data['chapter'] = index;
+      updateTOC();
+      localStorage.setItem(bookName, JSON.stringify(data));
+      updateButtonStates();
+      if (!showTOC) {
+        // 这里不再需要隐藏书名，因为书名已从页面内容中移除
+      }
+    }
+
+    function updateTOC() {
+      const chapterListItems = document.getElementById('chapter-list').children;
+      for (let i = 0; i < chapterListItems.length; i++) {
+        if (i === data['chapter']) {
+          chapterListItems[i].classList.add('active-chapter');
+        } else {
+          chapterListItems[i].classList.remove('active-chapter');
+        }
+      }
+    }
+
+    function updateButtonStates() {
+      const prevButton = document.getElementById('prev-chapter-btn');
+      const nextButton = document.getElementById('next-chapter-btn');
+      prevButton.disabled = data['chapter'] === 0;
+      nextButton.disabled = data['chapter'] === novels.length - 1;
+    }
+
+    document.getElementById('prev-chapter-btn').onclick = function () {
+      if (data['chapter'] > 0) {
+        showChapter(data['chapter'] - 1);
+      }
+    };
+
+
+    document.getElementById('toc-btn').onclick = function () {
+      showTOC = !showTOC;
+      updateTOCVisibility();
+      if (showTOC) {
+        // document.getElementById('book-title').style.display = 'block';
+        const currentChapterLi = document.getElementById('chapter-list').children[data['chapter']];
+        if (currentChapterLi) {
+          currentChapterLi.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      } else {
+        // document.getElementById('book-title').style.display = 'none';
+      }
+    };
+
+    document.getElementById('next-chapter-btn').onclick = function () {
+      if (data['chapter'] < novels.length - 1) {
+        showChapter(data['chapter'] + 1);
+      }
+    };
+
+    function updateTOCVisibility() {
+      const tocList = document.getElementById('chapter-list');
+      if (showTOC) {
+        tocList.style.display = 'block';
+      } else {
+        tocList.style.display = 'none';
+      }
+    }
+
+    document.getElementById('next-chapter-btn').onclick = function () {
+      if (data['chapter'] < novels.length - 1) {
+        showChapter(data['chapter'] + 1);
+        // 新增：滚动到顶部
+        window.scrollTo(0, 0);
+      }
+    };
+
+    document.getElementById('prev-chapter-btn').onclick = function () {
+      if (data['chapter'] > 0) {
+        showChapter(data['chapter'] - 1);
+        // 新增：滚动到顶部
+        window.scrollTo(0, 0);
+      }
+    };
+  </script>
+</body>
+
+</html>

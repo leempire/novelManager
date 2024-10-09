@@ -10,6 +10,7 @@ class Setting:
         self.defaultSetting = {
             'readSpeed': 10.0,
             'autoCls': 0,
+            'hReadTemplate': 'hreader',
         }
         self.setting = readAndCreate(self.settingPath, dict())
         # 若键值缺失，使用默认值

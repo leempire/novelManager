@@ -17,9 +17,10 @@ setting = Setting()
 
 
 @rootOrder.register('set', 'set [key] [value]\n'
-                               ' 修改默认设置，支持以下设置项\n'
-                               ' readSpeed: float 命令行阅读器阅读速度（字/秒）\n'
-                               ' autoCls: 0/1 是否开启命令行自动刷新')
+                           ' 修改默认设置，支持以下设置项\n'
+                           ' readSpeed: float 命令行阅读器阅读速度（字/秒）\n'
+                           ' autoCls: 0/1 是否开启命令行自动刷新\n'
+                           ' hReadTemplate: html阅读器模板，输入 ./html/ 文件夹下的文件名')
 def set(key, value):
     if key in setting:
         p, n = setting.set(key, value)
@@ -93,7 +94,7 @@ def shelfExport(index=None):
                              ' 使用shelf search/show 后，阅读index项书籍\n'
                              ' chapter取默认值时为当前阅读进度\n'
                              ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
-def shelfRead(index, chapter=None):
+def read(index, chapter=None):
     index = shelfManager.checkIndex(index)
     book = shelfManager.books[index]
     progress = book['progress'] if chapter is None else [int(chapter) - 1, 0]  # 阅读进度
@@ -108,11 +109,23 @@ def shelfRead(index, chapter=None):
                              ' 当novelManager阅读进度发生变化时，使用hread将自动同步到novelManager的进度\n'
                              ' 使用hread后将在 ./data/export/ 中产生html文件，下次阅读时可直接打开该文件\n'
                              ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
-def shelfHRead(index, chapter=None):
+def hRead(index, chapter=None):
+    # 获取index对应的书籍
     index = shelfManager.checkIndex(index)
     book = shelfManager.books[index]
-    htmlReader(book, shelfManager, chapter if chapter is None else int(chapter) - 1)
-    return '已打开网页阅读器'
+    # 获取书名及内容
+    bookName = book['bookName']
+    bookContent = [chap.split('\n') for chap in shelfManager.getBookChapters(book)]  # [[para1, para2, ...] #chap1, ...]
+    # 获取阅读进度
+    if chapter is None:
+        chapter = book['progress'][0]
+    else:  # 限制章节范围
+        chapter = int(chapter) - 1
+        chapter = min(len(bookContent) - 1, chapter)
+        chapter = max(chapter, 0)
+    path = shelfManager.exportPath / (bookName + '.html')
+    result = htmlReader(bookName, bookContent, chapter, path, setting['hReadTemplate'])
+    return result
 
 
 # 书城
