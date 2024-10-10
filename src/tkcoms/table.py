@@ -115,7 +115,7 @@ class Table(Treeview):
             Style().configure(self.cget("style"), rowheight=rowheight)
         if font is not None:
             Style().configure(self.cget("style"), font=font)
-            Style().configure(f"{self.cget("style")}.Heading", font=font)
+            Style().configure(f"{self.cget('style')}.Heading", font=font)
         if zero_text is not None:
             self.heading("#0", text=zero_text)
         if minwidth is not None:
