@@ -110,11 +110,10 @@ class GUI(Window):
                 self.updateShelf()
         elif self.mode == 'city':
             if action == 0:  # 添加
-                index = int(index) - 1
                 if not 0 <= index < len(fq.books):
                     return
                 book = fq.books[index]
-                return shelfManager.addFromCity(book)
+                print(shelfManager.addFromCity(book))
 
 
 g = GUI(0)
