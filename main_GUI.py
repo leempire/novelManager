@@ -77,36 +77,44 @@ class GUI(Window):
         index -= 1
         if index == -1:
             return
-        # 更新
-        if action == 0:
-            book = shelfManager.getBookByIndex(index)
-            if book['src'].isdigit():  # 书籍来源为city，可更新
-                def thread():
-                    chapters = fq.getChapters(book['src'])  # 章节id + 章节标题 的列表
-                    cc = shelfManager.getBookChapters(book)  # 本地的章节列表
-                    for i, chapter in enumerate(chapters[len(cc):]):  # 从最新章节开始更新
-                        text = chapter[1] + fq.getText(chapter[0])
-                        cc.append(text)
-                        print('已更新：《{}》 {}\t字数：{}'.format(book['bookName'], chapter[1], len(text)))
-                        # 保存
-                        if i % 5 == 0:
-                            shelfManager.getBookPath(book).write(cc)
-                            shelfManager.update()
-                    shelfManager.getBookPath(book).write(cc)  # 保存
-                    shelfManager.update()
-                    self.updateShelf()
+        if self.mode == 'shelf':
+            # 更新
+            if action == 0:
+                book = shelfManager.getBookByIndex(index)
+                if book['src'].isdigit():  # 书籍来源为city，可更新
+                    def thread():
+                        chapters = fq.getChapters(book['src'])  # 章节id + 章节标题 的列表
+                        cc = shelfManager.getBookChapters(book)  # 本地的章节列表
+                        for i, chapter in enumerate(chapters[len(cc):]):  # 从最新章节开始更新
+                            text = chapter[1] + fq.getText(chapter[0])
+                            cc.append(text)
+                            print('已更新：《{}》 {}\t字数：{}'.format(book['bookName'], chapter[1], len(text)))
+                            # 保存
+                            if i % 5 == 0:
+                                shelfManager.getBookPath(book).write(cc)
+                                shelfManager.update()
+                        shelfManager.getBookPath(book).write(cc)  # 保存
+                        shelfManager.update()
+                        self.updateShelf()
 
-                # 开启单一线程下载
-                threading.Thread(target=thread, daemon=True).start()
-            else:  # 不可更新
-                pass
-        # 导出
-        elif action == 1:
-            shelfManager.export(index)
-        # 删除
-        elif action == 2:
-            shelfManager.remove(index)
-            self.updateShelf()
+                    # 开启单一线程下载
+                    threading.Thread(target=thread, daemon=True).start()
+                else:  # 不可更新
+                    pass
+            # 导出
+            elif action == 1:
+                shelfManager.export(index)
+            # 删除
+            elif action == 2:
+                shelfManager.remove(index)
+                self.updateShelf()
+        elif self.mode == 'city':
+            if action == 0:  # 添加
+                index = int(index) - 1
+                if not 0 <= index < len(fq.books):
+                    return
+                book = fq.books[index]
+                return shelfManager.addFromCity(book)
 
 
 g = GUI(0)
