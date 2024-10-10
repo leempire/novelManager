@@ -77,6 +77,7 @@ class App:
         self.statusbar_shelf.add(self.button_add_shelf)
         self.statusbar_shelf.add(self.button_remove_shelf)
         self.statusbar_shelf.add(self.button_search_shelf)
+        self.statusbar_shelf.add(self.button_export_shelf)
         self.scrollbar_y_shelf.configure(command=self.table_shelf.yview)
         self.scrollbar_x_shelf.configure(command=self.table_shelf.xview, orient="horizontal")
 
@@ -159,7 +160,7 @@ class App:
             self.statusbar_shelf.show_message(result, 3, "blue")
 
     def export_shelf(self):
-        index = self.table_shelf.position[0] - 1
+        index = self.table_shelf.position[0] - 2
 
         if index >= 1:
             book = shelfManager.export(index)
