@@ -2,6 +2,17 @@ from .basic.fileManager import Path, readAndCreate, sanitizeFilename, stringSimi
 
 
 class ShelfManager:
+    """
+    属性：
+    shelf: [book1, book2, ...]
+        book:dict key: bookName, author, wordNumber, chapterNumber,
+                       src:filePath(import)/digit(from city), progress:[chapter, word]
+    
+    方法：
+        getShelf -> [book]
+        formatBook(book) -> 格式化为字符串，包含书名、作者等信息
+    """
+
     def __init__(self, datapath='data'):
         self.datapath = Path(datapath)
         self.importPath = self.datapath / 'import'

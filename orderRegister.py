@@ -39,6 +39,8 @@ threading.Thread(target=reader.run, daemon=True).start()
 
 @shelfOrder.register('show', 'shelf show\n 显示书架所有书籍')
 def shelfShow():
+    # books: [book1, book2, ...]
+    # book: {'bookName', 'author', 'wordNumber', 'chapterNumber', 'src', 'progress'}
     books = shelfManager.getShelf()
     result = ''
     if not books:
@@ -57,6 +59,8 @@ def shelfAdd(bookName='all', author='匿名'):
 
 @shelfOrder.register('search', 'shelf search [keywords]\n 在书架内关键字搜索\n keywords支持空格')
 def shelfSearch(*keywords):
+    # books: [book1, book2, ...]
+    # book: {'bookName', 'author', 'wordNumber', 'chapterNumber', 'src', 'progress'}
     books = shelfManager.search(' '.join(keywords))
     result = ''
     for i, book in enumerate(books):
@@ -137,6 +141,8 @@ fq = FQBug()
 @cityOrder.register('search', 'city search [keywords]\n 在书城中关键字搜索')
 def citySearch(*keywords):
     keywords = ' '.join(keywords)
+    # books: [book1, book2, ...]
+    # book: {'bookName', 'author', 'wordNumber', 'chapterNumber'}
     books = fq.search(keywords)
     result = ''
     for i, book in enumerate(books):
