@@ -43,12 +43,15 @@ class App:
         self.scrollbar_x_shelf = Scrollbar(self.frame_top_shelf)
         self.scrollbar_y_shelf = Scrollbar(self.frame_top_shelf)
 
-        self.statusbar_shelf = StatusBar(self.frame_shelf)
-        self.button_show_shelf = Button(self.statusbar_shelf, text="Show")
-        self.button_add_shelf = Button(self.statusbar_shelf, text="Add")
-        self.button_search_shelf = Button(self.statusbar_shelf, text="Search")
-        self.button_remove_shelf = Button(self.statusbar_shelf, text="Remove")
-        self.button_export_shelf = Button(self.statusbar_shelf, text="Export")
+        self.statusbar_shelf_1 = StatusBar(self.frame_shelf)
+        self.button_show_shelf = Button(self.statusbar_shelf_1, text="Show")
+        self.button_add_shelf = Button(self.statusbar_shelf_1, text="Add")
+        self.button_remove_shelf = Button(self.statusbar_shelf_1, text="Remove")
+        self.button_export_shelf = Button(self.statusbar_shelf_1, text="Export")
+        self.button_update_city = Button(self.statusbar_shelf_1, text="Update")
+        self.statusbar_shelf_2 = StatusBar(self.frame_shelf)
+        self.button_search_shelf = Button(self.statusbar_shelf_2, text="Search")
+        self.entry_search_shelf = Entry(self.statusbar_shelf_2)
 
         self.frame_city = Frame(self.notebook)
 
@@ -58,7 +61,7 @@ class App:
         self.scrollbar_y_city = Scrollbar(self.frame_top_city)
 
         self.statusbar_city = StatusBar(self.frame_city)
-        self.button_update_city = Button(self.statusbar_city, text="Update")
+        self.button_update_city = Button(self.statusbar_shelf_1, text="Update")
         self.button_add_city = Button(self.statusbar_city, text="Add")
         self.button_search_city = Button(self.statusbar_city, text="Search")
         self.entry_search_city = Entry(self.statusbar_city)
@@ -73,18 +76,20 @@ class App:
         self.button_search_shelf.configure(command=self.search_shelf)
         self.button_remove_shelf.configure(command=self.remove_shelf)
         self.button_export_shelf.configure(command=self.export_shelf)
-        self.statusbar_shelf.add(self.button_show_shelf)
-        self.statusbar_shelf.add(self.button_add_shelf)
-        self.statusbar_shelf.add(self.button_remove_shelf)
-        self.statusbar_shelf.add(self.button_search_shelf)
-        self.statusbar_shelf.add(self.button_export_shelf)
+        self.button_update_city.configure(command=self.update_city)
+        self.statusbar_shelf_1.add(self.button_show_shelf)
+        self.statusbar_shelf_1.add(self.button_add_shelf)
+        self.statusbar_shelf_1.add(self.button_remove_shelf)
+        self.statusbar_shelf_1.add(self.button_export_shelf)
+        self.statusbar_shelf_1.add(self.button_update_city)
+        self.statusbar_shelf_2.add(self.button_search_shelf)
+        self.statusbar_shelf_2.add(self.entry_search_shelf)
+        self.statusbar_shelf_2.show_message("", -1)
         self.scrollbar_y_shelf.configure(command=self.table_shelf.yview)
         self.scrollbar_x_shelf.configure(command=self.table_shelf.xview, orient="horizontal")
 
-        self.button_update_city.configure(command=self.update_city)
         self.button_add_city.configure(command=self.add_city)
         self.button_search_city.configure(command=self.search_city)
-        self.statusbar_city.add(self.button_update_city)
         self.statusbar_city.add(self.button_search_city)
         self.statusbar_city.add(self.entry_search_city)
         self.statusbar_city.add(self.button_add_city)
@@ -97,7 +102,8 @@ class App:
         self.scrollbar_y_shelf.pack(side="right", fill="y")
         self.scrollbar_x_shelf.pack(side="bottom", fill="x")
         self.table_shelf.pack(side="top", expand=True, fill="both")
-        self.statusbar_shelf.pack(side="bottom", fill="x")
+        self.statusbar_shelf_1.pack(side="bottom", fill="x")
+        self.statusbar_shelf_2.pack(side="bottom", fill="x")
 
         self.notebook.add(self.frame_city, text="city")
         self.frame_top_city.pack(side="top", fill="both", expand=True)
@@ -128,11 +134,10 @@ class App:
             self.table_shelf.add_row(items=[str(i+1), book['bookName'], book["author"], book["wordNumber"], book["chapterNumber"]])
 
     def search_shelf(self):
-        data = {"KeyWords": ""}
-        r = askdict(data, "Search", 2, (self.root.winfo_x(), self.root.winfo_y()))
+        r = self.entry_search_shelf.get()
 
-        if r is not None:
-            keywords = r["KeyWords"].split(";")
+        if r != "":
+            keywords = r.split(" ")
             books = shelfManager.search(' '.join(keywords))
 
             self.table_shelf.clear()
@@ -141,6 +146,8 @@ class App:
             self.table_shelf.add_row(items=["index", 'bookName', 'author', 'wordNumber', 'chapterNumber'])
             for i, book in enumerate(books):
                 self.table_shelf.add_row(items=[str(i + 1), book['bookName'], book["author"], book["wordNumber"], book["chapterNumber"]])
+        else:
+            self.statusbar_shelf_1.show_message("尚未填入搜索关键词", 3000, color="blue")
 
     def add_shelf(self):
         data = {"BookName": "all", "Author": ""}
@@ -159,18 +166,17 @@ class App:
 
             result = '已删除：{}'.format(shelfManager.formatBook(book))
 
-            self.statusbar_shelf.show_message(result, 3000, "blue")
+            self.statusbar_shelf_1.show_message(result, 3000, "blue")
 
             self.show_shelf()
 
     def export_shelf(self):
         index = self.table_shelf.position[0] - 2
 
-        if index >= 1:
-            book = shelfManager.export(index)
-            result = '已导出：{}\n请前往 ./data/export/ 文件夹查看'.format(shelfManager.formatBook(book))
+        book = shelfManager.export(index)
+        result = '已导出：{}\n请前往 ./data/export/ 文件夹查看'.format(shelfManager.formatBook(book))
 
-            self.statusbar_shelf.show_message(result, 3000, "blue")
+        self.statusbar_shelf_1.show_message(result, 3000, "blue")
 
     def search_city(self):
         keywords = self.entry_search_city.get()
@@ -198,21 +204,26 @@ class App:
         self.show_shelf()
 
     def update_city(self):
-        for book in shelfManager.getShelf():
-            if book['src'].isdigit():  # 书籍来源为city，可更新
-                chapters = fq.getChapters(book['src'])  # 章节id + 章节标题 的列表
-                cc = shelfManager.getBookChapters(book)  # 本地的章节列表
-                for i, chapter in enumerate(chapters[len(cc):]):  # 从最新章节开始更新
-                    text = chapter[1] + fq.getText(chapter[0])
-                    cc.append(text)
-                    self.statusbar_city.show_message('已更新：《{}》 {}\t字数：{}'.format(book['bookName'], chapter[1], len(text)))
-                    # 保存
-                    if i % 5 == 0:
-                        shelfManager.getBookPath(book).write(cc)
-                        shelfManager.update()
-                shelfManager.getBookPath(book).write(cc)  # 保存
-                shelfManager.update()
-        self.statusbar_city.show_message('已全部更新完毕')
+
+        def _():
+            for book in shelfManager.getShelf():
+                if book['src'].isdigit():  # 书籍来源为city，可更新
+                    chapters = fq.getChapters(book['src'])  # 章节id + 章节标题 的列表
+                    cc = shelfManager.getBookChapters(book)  # 本地的章节列表
+                    for i, chapter in enumerate(chapters[len(cc):]):  # 从最新章节开始更新
+                        text = chapter[1] + fq.getText(chapter[0])
+                        cc.append(text)
+                        self.statusbar_city.show_message('已更新：《{}》 {}\t字数：{}'.format(book['bookName'], chapter[1], len(text)))
+                        # 保存
+                        if i % 5 == 0:
+                            shelfManager.getBookPath(book).write(cc)
+                            shelfManager.update()
+                    shelfManager.getBookPath(book).write(cc)  # 保存
+                    shelfManager.update()
+            self.statusbar_city.show_message('已全部更新完毕')
+            self.show_shelf()
+
+        threading.Thread(target=_, daemon=True).start()
 
 
 App().start()
