@@ -33,7 +33,7 @@ def set(key, value):
 shelfOrder = OrderAnalyser()
 rootOrder.register('shelf', 'shelf ...\n 书架指令集')(shelfOrder)
 shelfManager = ShelfManager()
-reader = AutoReader(shelfManager)
+reader = AutoReader(shelfManager.saveShelf)
 threading.Thread(target=reader.run, daemon=True).start()
 
 
@@ -72,7 +72,6 @@ def shelfSearch(*keywords):
                                ' 使用 shelf search/show 后，在书架中删除index项\n'
                                ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
 def shelfRemove(index):
-    index = shelfManager.checkIndex(index)
     book = shelfManager.remove(index)
     return '已删除：{}'.format(shelfManager.formatBook(book))
 
@@ -82,7 +81,6 @@ def shelfRemove(index):
                                ' index取默认值时导出全部书籍\n'
                                ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
 def shelfExport(index=None):
-    index = shelfManager.checkIndex(index)
     book = shelfManager.export(index)
     if index is None:
         result = ''
@@ -99,10 +97,10 @@ def shelfExport(index=None):
                              ' chapter取默认值时为当前阅读进度\n'
                              ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
 def read(index, chapter=None):
-    index = shelfManager.checkIndex(index)
-    book = shelfManager.books[index]
+    book = shelfManager.getBookByIndex(index)
+    novel = shelfManager.getBookChapters(book)
     progress = book['progress'] if chapter is None else [int(chapter) - 1, 0]  # 阅读进度
-    reader.loadNovel(book, *progress)
+    reader.loadNovel(book, novel, *progress)
     reader.switch(True)
     return '已开启命令行阅读模式'
 
@@ -115,8 +113,7 @@ def read(index, chapter=None):
                              ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
 def hRead(index, chapter=None):
     # 获取index对应的书籍
-    index = shelfManager.checkIndex(index)
-    book = shelfManager.books[index]
+    book = shelfManager.getBookByIndex(index)
     # 获取书名及内容
     bookName = book['bookName']
     bookContent = [chap.split('\n') for chap in shelfManager.getBookChapters(book)]  # [[para1, para2, ...] #chap1, ...]

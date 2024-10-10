@@ -28,7 +28,17 @@ def strInterpreter(n, mode):
     return s
 
 class FQBug:
-    """番茄小说爬虫，支持在书城中搜索书籍、下载书籍"""
+    """
+    番茄小说爬虫，支持在书城中搜索书籍、下载书籍
+
+    数据类型：
+    book: dict类型，key: bookName, author, wordNumber, chapterNumber, bookId
+
+    方法：
+        getChapters(url) -> [[code, title], ...] 获取书籍章节目录，url可以为书籍id
+        getText(code) -> text 获取code对应章节的正文
+        search(key) -> [book1, ...] 关键字搜索
+    """
 
     def __init__(self):
         """初始化请求头，获取cookie"""
@@ -43,36 +53,11 @@ class FQBug:
         self.headers = headers_lib[random.randint(0, len(headers_lib) - 1)]
         self.cookiePath = Path('data/cookie.json')
         self.cookie = readAndCreate(self.cookiePath, '')
-        if self.getCookie('7177386477654180387', self.cookie) == 'err':
-            self.getCookie('7177386477654180387')
+        if self._getCookie('7177386477654180387', self.cookie) == 'err':
+            self._getCookie('7177386477654180387')
         self.books = []
 
-    def search(self, key):
-        """关键词搜索，返回最匹配的十个结果"""
-        url = f"https://api5-normal-lf.fqnovel.com/reading/bookapi/search/page/v/?query={key}&aid=1967&channel=0&os_version=0&device_type=0&device_platform=0&iid=466614321180296&passback={{(page-1)*10}}&version_code=999"
-        bug = Bug(url)
-        books = json.loads(bug.text)['data']
-        for i, book in enumerate(books):
-            book = book['book_data'][0]
-            books[i] = {'bookName': book['book_name'], 'author': book['author'], 'bookId': book['book_id'],
-                        'wordNumber': book['word_number'], 'chapterNumber': book['serial_count']}
-        self.books = books
-        return books
-
-    def getChapters(self, url):
-        """将书籍目录添加到书架，输入书籍的id或url"""
-        url = str(url)
-        if url[:4] != 'http':
-            url = 'https://fanqienovel.com/page/' + url
-        bug = Bug()
-        bug.set_header(self.headers)
-        bug.get(url)
-        codes = []
-        for a in bug.find('class="page-directory-content"').findall('<a'):
-            codes.append([a['href'][8:], a.get_text()])
-        return codes
-
-    def getCookie(self, zj, t=0):
+    def _getCookie(self, zj, t=0):
         """获取cookie"""
         bas = 1000000000000000000
         if t == 0:
@@ -89,6 +74,19 @@ class FQBug:
             else:
                 return 'err'
 
+    def getChapters(self, url):
+        """将书籍目录添加到书架，输入书籍的id或url"""
+        url = str(url)
+        if url[:4] != 'http':
+            url = 'https://fanqienovel.com/page/' + url
+        bug = Bug()
+        bug.set_header(self.headers)
+        bug.get(url)
+        codes = []
+        for a in bug.find('class="page-directory-content"').findall('<a'):
+            codes.append([a['href'][8:], a.get_text()])
+        return codes
+
     def getText(self, code):
         """获取code对应的章节正文"""
         self.headers['cookie'] = self.cookie
@@ -100,3 +98,15 @@ class FQBug:
             text = text.replace('\n\n', '\n')
         text = strInterpreter(text, 0)
         return text
+
+    def search(self, key):
+        """关键词搜索，返回最匹配的十个结果"""
+        url = f"https://api5-normal-lf.fqnovel.com/reading/bookapi/search/page/v/?query={key}&aid=1967&channel=0&os_version=0&device_type=0&device_platform=0&iid=466614321180296&passback={{(page-1)*10}}&version_code=999"
+        bug = Bug(url)
+        books = json.loads(bug.text)['data']
+        for i, book in enumerate(books):
+            book = book['book_data'][0]
+            books[i] = {'bookName': book['book_name'], 'author': book['author'], 'bookId': book['book_id'],
+                        'wordNumber': book['word_number'], 'chapterNumber': book['serial_count']}
+        self.books = books
+        return books

@@ -189,7 +189,7 @@ class Robot:
         if not self.record:
             self.record.append(wait)
         elif self.record[-1].cate == 'wait':
-            self.record[-1].add(self.wait)
+            self.record[-1]._add(self.wait)
         else:
             self.record.append(wait)
 
