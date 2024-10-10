@@ -4,6 +4,8 @@
 ## 一、项目概述
 novelManager 是一款集成书架管理、书籍下载以及小说阅读功能的工具。
 
+**特别鸣谢**：感谢 wqqxxx 对 1.4 版本 tkinterGUI 部分的 contribute
+
 ## 二、环境要求与启动方式
 1. 环境需求
    - 需要安装 Python 3.10 版本。
@@ -80,6 +82,14 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 **版本 1.3.2（2024-10-10）**
 - 添加了一些代码注释和文档
 - 修改了命令行阅读器保存进度的逻辑，现在执行`read`后按`esc`退出的同时保存进度
+</details>
+
+<details>
+<summary>V 1.4</summary>
+
+**版本 1.4.0（2024-10-10）**
+- 添加了tkinterGUI，使用`python main_tk.py`运行
+- 注意：tkinterGUI功能不完善！
 </details>
 
 ## 四、指令详细介绍

@@ -3,7 +3,6 @@ import os
 import threading
 import time
 import webbrowser
-
 from .basic.record import Robot
 
 

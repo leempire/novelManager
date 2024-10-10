@@ -4,7 +4,13 @@ from .reader import Reader
 
 
 class Setting:
-    """设置阅读速度、自动清空命令行"""
+    """
+    设置
+    可设置属性：
+        阅读速度
+        自动清空命令行
+        html阅读器模板
+    """
     def __init__(self):
         self.settingPath = Path('data/setting.json')
         self.defaultSetting = {
