@@ -53,8 +53,7 @@ class FQBug:
         self.headers = headers_lib[random.randint(0, len(headers_lib) - 1)]
         self.cookiePath = Path('data/cookie.json')
         self.cookie = readAndCreate(self.cookiePath, '')
-        if self._getCookie('7177386477654180387', self.cookie) == 'err':
-            self._getCookie('7177386477654180387')
+        self.cookieInit = False
         self.books = []
 
     def _getCookie(self, zj, t=0):
@@ -64,15 +63,19 @@ class FQBug:
             for i in range(random.randint(bas * 6, bas * 8), bas * 9):
                 time.sleep(random.randint(50, 150) / 1000)
                 self.cookie = 'novel_web_id=' + str(i)
-                if len(self.getText(zj)) > 200:
+                if len(self.getText(zj, False)) > 200:
                     self.cookiePath.write(self.cookie)
                     return 's'
         else:
             self.cookie = t
-            if len(self.getText(zj)) > 200:
+            if len(self.getText(zj, False)) > 200:
                 return 's'
             else:
                 return 'err'
+
+    def getCookie(self):
+        if self._getCookie('7177386477654180387', self.cookie) == 'err':
+            self._getCookie('7177386477654180387')
 
     def getChapters(self, url):
         """将书籍目录添加到书架，输入书籍的id或url"""
@@ -87,8 +90,11 @@ class FQBug:
             codes.append([a['href'][8:], a.get_text()])
         return codes
 
-    def getText(self, code):
+    def getText(self, code, autoCookie=True):
         """获取code对应的章节正文"""
+        if not self.cookieInit and autoCookie:
+            self.getCookie()
+            self.cookieInit = True
         self.headers['cookie'] = self.cookie
         bug = Bug()
         bug.set_header(self.headers)

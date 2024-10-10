@@ -122,7 +122,9 @@ class ShelfManager:
                 f"章节数：{book['chapterNumber']}")
 
     def getBookByIndex(self, index):
-        return self.books[self._checkIndex(index)]
+        index = self._checkIndex(index)
+        book = self.books[index]
+        return book
 
     def getBookPath(self, book):
         """获取book保存的位置"""

@@ -90,6 +90,10 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 **版本 1.4.0（2024-10-10）**
 - 添加了tkinterGUI，使用`python main_tk.py`运行
 - 注意：tkinterGUI功能不完善！
+
+**版本 1.4.1（2024-10-10）**
+- 新增了`main_GUI.py`，运行该文件可打开tkinterGUI
+- 优化了书城爬虫的初始化逻辑，加快了程序启动速度
 </details>
 
 ## 四、指令详细介绍
