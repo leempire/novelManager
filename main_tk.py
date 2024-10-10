@@ -149,6 +149,8 @@ class App:
         if r is not None:
             shelfManager.addFromFile(r["BookName"], r["Author"])
 
+            self.show_shelf()
+
     def remove_shelf(self):
         index = self.table_shelf.position[0] - 1
 
@@ -157,7 +159,9 @@ class App:
 
             result = '已删除：{}'.format(shelfManager.formatBook(book))
 
-            self.statusbar_shelf.show_message(result, 3, "blue")
+            self.statusbar_shelf.show_message(result, 3000, "blue")
+
+            self.show_shelf()
 
     def export_shelf(self):
         index = self.table_shelf.position[0] - 2
@@ -166,7 +170,7 @@ class App:
             book = shelfManager.export(index)
             result = '已导出：{}\n请前往 ./data/export/ 文件夹查看'.format(shelfManager.formatBook(book))
 
-            self.statusbar_shelf.show_message(result, 3, "blue")
+            self.statusbar_shelf.show_message(result, 3000, "blue")
 
     def search_city(self):
         keywords = self.entry_search_city.get()
@@ -187,9 +191,11 @@ class App:
     def add_city(self):
         index = self.table_city.position[0]-2
         if not 0 <= index < len(fq.books):
-            self.statusbar_city.show_message('序号错误，请先使用search搜索后，再添加相应书籍', 2, "blue")
+            self.statusbar_city.show_message('序号错误，请先使用search搜索后，再添加相应书籍', 3000, "blue")
         book = fq.books[index]
-        return shelfManager.addFromCity(book)
+
+        shelfManager.addFromCity(book)
+        self.show_shelf()
 
     def update_city(self):
         for book in shelfManager.getShelf():
