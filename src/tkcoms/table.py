@@ -231,14 +231,14 @@ class Table(Treeview):
             self._history_cur += 1
 
         if r % 2:
-            index = self.insert("", r, text=str(r + 1), tags="odd")
+            index = self.insert("", r, text=str(r), tags="odd")
         else:
-            index = self.insert("", r, text=str(r + 1), tags="even")
+            index = self.insert("", r, text=str(r), tags="even")
         for j, i in enumerate(self.get_children("")[r + 1:]):
             if (j + r + 2) % 2:
-                self.item(i, text=str(j + r + 2), tags="even")
+                self.item(i, text=str(j + r + 2-1), tags="even")
             else:
-                self.item(i, text=str(j + r + 2), tags="odd")
+                self.item(i, text=str(j + r + 2-1), tags="odd")
         if items is None:
             self.item(index, values=["" for _ in range(size[1])])
         else:
@@ -291,9 +291,9 @@ class Table(Treeview):
         self.delete(self.get_children("")[r - 1])
         for j, i in enumerate(self.get_children("")[r - 1:]):
             if (j + r) % 2:
-                self.item(i, text=str(j + r), tags="even")
+                self.item(i, text=str(j + r-1), tags="even")
             else:
-                self.item(i, text=str(j + r), tags="odd")
+                self.item(i, text=str(j + r-1), tags="odd")
 
     def del_col(self, c: int, record=True):  # 删除某一列
         size = self.table_size
