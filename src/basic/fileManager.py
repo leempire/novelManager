@@ -58,7 +58,7 @@ class Path:
         return os.path.basename(self.path).split('.')[0]
 
     def __eq__(self, other):
-        if isinstance(other, Path):
+        if not isinstance(other, Path):
             other = Path(other)
         return other.path == self.path
 

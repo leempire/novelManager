@@ -110,9 +110,12 @@ class FQBug:
         url = f"https://api5-normal-lf.fqnovel.com/reading/bookapi/search/page/v/?query={key}&aid=1967&channel=0&os_version=0&device_type=0&device_platform=0&iid=466614321180296&passback={{(page-1)*10}}&version_code=999"
         bug = Bug(url)
         books = json.loads(bug.text)['data']
-        for i, book in enumerate(books):
-            book = book['book_data'][0]
-            books[i] = {'bookName': book['book_name'], 'author': book['author'], 'bookId': book['book_id'],
-                        'wordNumber': book['word_number'], 'chapterNumber': book['serial_count']}
-        self.books = books
-        return books
+        if books is None:
+            self.books = []
+        else:
+            for i, book in enumerate(books):
+                book = book['book_data'][0]
+                books[i] = {'bookName': book['book_name'], 'author': book['author'], 'bookId': book['book_id'],
+                            'wordNumber': int(book['word_number']), 'chapterNumber': int(book['serial_count'])}
+            self.books = books
+        return self.books

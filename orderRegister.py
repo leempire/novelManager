@@ -149,7 +149,8 @@ def citySearch(*keywords):
 
 @cityOrder.register('add', 'city add [index]\n 将书城搜索的结果序号对应的书籍添加到书城\n keywords支持空格')
 def cityAdd(index):
-    index = int(index) - 1
+    if type(index) == str:
+        index = int(index) - 1
     if not 0 <= index < len(fq.books):
         return '序号错误，请先使用city search搜索后，再添加相应书籍'
     book = fq.books[index]

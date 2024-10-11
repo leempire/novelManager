@@ -1,4 +1,5 @@
 from .basic.fileManager import Path, readAndCreate, sanitizeFilename, stringSimilar
+import os
 
 
 class ShelfManager:
@@ -85,6 +86,14 @@ class ShelfManager:
                     except Exception as e:
                         result += '{}文件出错:(\n{}\n'.format(file, e)
             return result
+        elif os.path.isfile(bookName):
+            file = Path(bookName)
+            bookName = file.filename
+            text = file.read().strip()
+            chapters = text.split('\n\n')
+            book = self._add(bookName, author, len(text), len(chapters), file.path)
+            self.getBookPath(book).write(chapters)  # 解析到store文件夹
+            return '已添加：' + self.formatBook(book)
         else:
             # 判断书籍是否已存在
             for book in self.shelf:

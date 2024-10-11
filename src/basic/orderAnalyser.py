@@ -41,6 +41,7 @@ class OrderAnalyser:
 
         def wrapper(func):
             self.orders[name] = [func, hint]
+            return func
 
         return wrapper
 
