@@ -1,13 +1,14 @@
 import threading
-from tkinter.messagebox import askyesno, showinfo
 from tkinter.filedialog import askopenfilename
+from tkinter.messagebox import askyesno, showinfo
+
+from orderRegister import shelfManager, fq, hRead, shelfRemove, cityAdd, cityUpdate, shelfAdd, set_
 from src.gui import Window, askQuestion
-from orderRegister import shelfManager, fq, hRead, shelfRemove, cityAdd, cityUpdate, shelfAdd
 
 
 class GUI(Window):
     topButton = ('搜索',)
-    menu = ('书架', ('操作', '更新', '导入'))
+    menu = ('书架', ('操作', '更新', '导入'), ('配色', '活力橙', '暗夜黑', '经典白', '靛紫青'))
     buttonNum = 2
     lineNum = 10
     labelWidth = (16, 12, 7, 10)
@@ -55,6 +56,19 @@ class GUI(Window):
             l.append([bookName, author, chapters, words])
         self.setList(l)
 
+    # 按钮点击事件
+    def menu_cmd(self, l1, l2=0):
+        if l1 == 0:  # 书架
+            self.shelfShow()
+        elif l1 == 1:  # 操作
+            if l2 == 0:  # 更新
+                self.cityUpdate()
+            elif l2 == 1:  # 导入
+                self.shelfAdd()
+        elif l1 == 2:  # 配色
+            set_('color', l2)
+            showinfo('提示', '配色已修改，下次启动时生效')
+
     def top_cmd(self, action):
         # 搜索
         if action == 0:
@@ -63,15 +77,6 @@ class GUI(Window):
                 self.shelfSearch()
             elif mode == '书城':
                 self.citySearch()
-
-    def menu_cmd(self, l1, l2=0):
-        if l1 == 0:  # 书架
-            self.shelfShow()
-        elif l1 == 1:
-            if l2 == 0:  # 更新
-                self.cityUpdate()
-            elif l2 == 1:  # 导入
-                self.shelfAdd()
 
     def mid_cmd(self, action, index):
         index += self.curPage * self.lineNum

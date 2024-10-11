@@ -27,7 +27,7 @@ class ShelfManager:
         update() -> 从书城中更新小说后，书籍的章节和字数发生变化，使用该方法自动更新章节和字数
 
         私有方法：
-        _add(bookName, author, wordNumber, chapterNumber, src) -> book: 添加书籍添
+        _add(bookName, author, wordNumber, chapterNumber, src) -> book: 添加书籍
         _checkIndex(index) -> index 将各种类型的索引进行转换
     """
 

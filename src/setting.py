@@ -1,5 +1,6 @@
 from .basic.fileManager import Path, readAndCreate
 from .basic.orderAnalyser import OrderAnalyser
+from .gui import Window
 from .reader import Reader
 
 
@@ -10,6 +11,7 @@ class Setting:
         阅读速度
         自动清空命令行
         html阅读器模板
+        GUI配色
     """
     def __init__(self):
         self.settingPath = Path('data/setting.json')
@@ -17,6 +19,7 @@ class Setting:
             'readSpeed': 10.0,
             'autoCls': 0,
             'hReadTemplate': 'hreader',
+            'color': 0,
         }
         self.setting = readAndCreate(self.settingPath, dict())
         # 若键值缺失，使用默认值
@@ -30,6 +33,7 @@ class Setting:
     def loadSetting(self):
         Reader.speed = self.setting['readSpeed']
         OrderAnalyser.autoCls = self.setting['autoCls']
+        Window.color = self.setting['color']
 
     def set(self, key, value):
         prev = self.setting[key]

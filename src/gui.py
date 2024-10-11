@@ -36,6 +36,7 @@ class Window:
         run() 打开GUI并进入主循环
         setList(content) 设置并更新列表信息
         setButtonText(content) 更新button的文字
+        setPage(page) 设置当前页面，自动将page调整到合法范围内
 
         模板方法：点击相应的按钮触发
         menu_cmd()
@@ -50,11 +51,12 @@ class Window:
     lineNum = 10  # 行数
     buttonNum = 3  # 按钮数量
     menu = ()
+    color = 0  # 配色方案
 
-    def __init__(self, color):
+    def __init__(self, color=None):
         self.focused = False
         self.entry_focused = False
-        self._color(color)
+        self._color(color or self.color)
         self.root = self._gui()
         self.curPage = 0
         self.curList = []
@@ -103,7 +105,7 @@ class Window:
             for j, width in enumerate(self.labelWidth):
                 t = StringVar()
                 label = Label(line, anchor=self.labelAnchor[j], width=width, textvariable=t,
-                              relief='solid', borderwidth=1, font=font)
+                              relief='ridge', borderwidth=1, font=font)
                 label.pack(side=LEFT, padx=2)
                 self.list[-1].append(t)
 

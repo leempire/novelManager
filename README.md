@@ -7,19 +7,21 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 **特别鸣谢**：感谢 wqqxxx 对 1.4.0 版本 `main_tk.py` 的 contribute
 
 ## 二、环境要求与启动方式
-1. 环境需求
+1. **环境需求**
    - 需要安装 Python 3.10 版本。
    - 通过以下命令安装相关依赖：
    ```commandline
     pip install -r requirements.txt
     ```
-2. 启动程序
-
-    在命令行中运行`python main.py`即可启动程序。
+2. **启动程序**
+   - 命令行模式：`python main.py`
+   - tkinterGUI 方案一 (contribute by wqqxxx)：`python main_tk.py`
+   - tkinterGUI 方案二： `python main_GUI.py`
 
 ## 三、版本更新记录
+<!--1.0版本-->
 <details>
-<summary>V 1.0</summary>
+<summary>V 1.0 实现了基础功能</summary>
 
 **版本 1.0.0（2024-10-5）**
 - 实现书架管理及书城爬虫功能。
@@ -34,9 +36,10 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
   - `exit`：安全退出程序。
 </details>
 
+<!--1.1版本-->
 <details>
 
-<summary>V 1.1</summary>
+<summary>V 1.1 更新了阅读功能</summary>
 
 **版本 1.1.0（2024-10-6）**
 - 更新阅读功能。
@@ -45,8 +48,9 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 - 新增`shelf read`：用于阅读书籍。
 </details>
 
+<!--1.2版本-->
 <details>
-<summary>V 1.2</summary>
+<summary>V 1.2 更新了网页阅读器功能</summary>
 
 **版本 1.2.0（2024-10-7）**
 - 新增网页阅读器相关功能。 
@@ -66,8 +70,9 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 - 调整了项目代码的结构。
 </details>
 
+<!--1.3版本-->
 <details>
-<summary>V 1.3</summary>
+<summary>V 1.3 更新了设置功能</summary>
 
 **版本 1.3.0（2024-10-8）**
 - 新增设置功能和优化其他功能。
@@ -84,8 +89,9 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 - 修改了命令行阅读器保存进度的逻辑，现在执行`read`后按`esc`退出的同时保存进度
 </details>
 
+<!--1.4版本-->
 <details>
-<summary>V 1.4</summary>
+<summary>V 1.4 更新了GUI</summary>
 
 **版本 1.4.0（2024-10-10）**
 - 添加了tkinterGUI，使用`python main_tk.py`运行
@@ -100,9 +106,13 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 - GUI支持的操作：
   - 书架：书架搜索、删除、阅读、导入
   - 书城：书城搜索、添加到书架、更新
+
+**版本1.4.3（2024-10-11）**
+- 对GUI界面新增配色切换
 </details>
 
 ## 四、指令详细介绍
+<!--shelf 指令集-->
 <details>
 <summary>shelf 指令集</summary>
 
@@ -125,6 +135,7 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 
 </details>
 
+<!--city 指令集-->
 <details>
 <summary>city 指令集</summary>
 
@@ -140,6 +151,7 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
   - 说明：每更新 5 章会自动保存，可以随时中断程序。
 </details>
 
+<!--其他指令-->
 <details>
 <summary>其他指令</summary>
 
@@ -151,6 +163,7 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
       - `readSpeed`（命令行阅读器阅读速度，单位为字 / 秒）
       - `autoCls`（是否开启命令行自动刷新，0 为关闭，1 为开启）。
       - `hReadTemplate`: html阅读器模板，输入`./html/`文件夹下的文件名
+      - `color`: `main_GUI`的配色方案，可选0~3，分别对应活力橙, 暗夜黑, 经典白, 靛紫青
     - `value`：对应设置项的值。
 - `help [orderName=help]`
   - 功能：查看`orderName`指令的帮助，支持长指令如`help shelf show`。

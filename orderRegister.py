@@ -1,12 +1,11 @@
 # 注册指令，每个函数上面的 @... 的第二个参数为函数功能说明
-from src.setting import Setting
-from src.fqBug import FQBug
-from src.shelfManager import ShelfManager
-from src.reader import AutoReader, htmlReader
-from src.basic.orderAnalyser import OrderAnalyser
-from sys import exit
 import threading
-
+from sys import exit
+from src.basic.orderAnalyser import OrderAnalyser
+from src.fqBug import FQBug
+from src.reader import AutoReader, htmlReader
+from src.setting import Setting
+from src.shelfManager import ShelfManager
 
 # 指令解析
 rootOrder = OrderAnalyser()
@@ -20,8 +19,9 @@ setting = Setting()
                            ' 修改默认设置，支持以下设置项\n'
                            ' readSpeed: float 命令行阅读器阅读速度（字/秒）\n'
                            ' autoCls: 0/1 是否开启命令行自动刷新\n'
-                           ' hReadTemplate: html阅读器模板，输入 ./html/ 文件夹下的文件名')
-def set(key, value):
+                           ' hReadTemplate: html阅读器模板，输入 ./html/ 文件夹下的文件名\n'
+                           ' color: main_GUI的配色方案，可选0~3，分别对应活力橙, 暗夜黑, 经典白, 靛紫青')
+def set_(key, value):
     if key in setting:
         p, n = setting.set(key, value)
         return '已将 {} 项从 {} 修改为 {}'.format(key, p, n)
@@ -93,9 +93,9 @@ def shelfExport(index=None):
 
 
 @rootOrder.register('read', 'read [index] [chapter=None]\n'
-                             ' 使用shelf search/show 后，阅读index项书籍\n'
-                             ' chapter取默认值时为当前阅读进度\n'
-                             ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
+                            ' 使用shelf search/show 后，阅读index项书籍\n'
+                            ' chapter取默认值时为当前阅读进度\n'
+                            ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
 def read(index, chapter=None):
     book = shelfManager.getBookByIndex(index)
     novel = shelfManager.getBookChapters(book)
