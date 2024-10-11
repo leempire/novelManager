@@ -1,14 +1,14 @@
-from src.setting import Setting
-from src.fqBug import FQBug
-from src.shelfManager import ShelfManager
-from src.reader import AutoReader
-from src.basic.orderAnalyser import OrderAnalyser
-from sys import exit
 import threading
+from sys import exit
 from tkinter import Tk, Frame, Button, Scrollbar, Entry
 from tkinter.ttk import Notebook
-from src.tkcoms import Table, StatusBar, askdict
 
+from src.basic.orderAnalyser import OrderAnalyser
+from src.fqBug import FQBug
+from src.reader import AutoReader
+from src.setting import Setting
+from src.shelfManager import ShelfManager
+from src.tkcoms import Table, StatusBar, askdict
 
 # 指令解析
 rootOrder = OrderAnalyser()
@@ -74,10 +74,10 @@ class App:
         import ctypes
         ctypes.windll.shcore.SetProcessDpiAwareness(1)
         ScaleFactor = ctypes.windll.shcore.GetScaleFactorForDevice(0)
-        self.root.tk.call('tk', 'scaling', ScaleFactor / 75)
+        self.root.tk.call('tk', 'scaling', ScaleFactor / 200)
 
-        self.table_shelf.configure_(font=("TkDefaultFont", 10))
-        self.table_city.configure_(font=("TkDefaultFont", 10))
+        self.table_shelf.configure_(font=("TkDefaultFont", 30))
+        self.table_city.configure_(font=("TkDefaultFont", 30))
 
         self.button_show_shelf.configure(command=self.show_shelf)
         self.button_add_shelf.configure(command=self.add_shelf)
@@ -130,7 +130,6 @@ class App:
 
         self.show_shelf()
 
-
         self.root.mainloop()
 
     def stop(self):
@@ -143,7 +142,8 @@ class App:
             self.table_shelf.del_row(1)
         self.table_shelf.add_row(items=['bookName', 'author', 'wordNumber', 'chapterNumber'])
         for i, book in enumerate(books):
-            self.table_shelf.add_row(items=[book['bookName'], book["author"], book["wordNumber"], book["chapterNumber"]])
+            self.table_shelf.add_row(items=[book['bookName'], book["author"],
+                                            book["wordNumber"], book["chapterNumber"]])
 
     def search_shelf(self):
         r = self.entry_search_shelf.get()
@@ -156,7 +156,8 @@ class App:
                 self.table_shelf.del_row(1)
             self.table_shelf.add_row(items=['bookName', 'author', 'wordNumber', 'chapterNumber'])
             for i, book in enumerate(books):
-                self.table_shelf.add_row(items=[book['bookName'], book["author"], book["wordNumber"], book["chapterNumber"]])
+                self.table_shelf.add_row(
+                    items=[book['bookName'], book["author"], book["wordNumber"], book["chapterNumber"]])
         else:
             self.statusbar_shelf_1.show_message("尚未填入搜索关键词", 3000, color="blue")
 
@@ -202,10 +203,10 @@ class App:
         if books is None:
             return
         for i, book in enumerate(books):
-            self.table_city.add_row(items=[ book['bookName'], book["author"], book["wordNumber"], book["chapterNumber"]])
+            self.table_city.add_row(items=[book['bookName'], book["author"], book["wordNumber"], book["chapterNumber"]])
 
     def add_city(self):
-        index = self.table_city.position[0]-2
+        index = self.table_city.position[0] - 2
         if not 0 <= index < len(fq.books):
             self.statusbar_city.show_message('序号错误，请先使用search搜索后，再添加相应书籍', 3000, "blue")
         book = fq.books[index]
@@ -217,24 +218,21 @@ class App:
 
         def _():
             index = self.table_shelf.position[0] - 1
-
-            for i, book in enumerate(shelfManager.getShelf()):
-                if index >= 1 and index != i+1:
-                    continue
-
-                if book['src'].isdigit():  # 书籍来源为city，可更新
-                    chapters = fq.getChapters(book['src'])  # 章节id + 章节标题 的列表
-                    cc = shelfManager.getBookChapters(book)  # 本地的章节列表
-                    for i, chapter in enumerate(chapters[len(cc):]):  # 从最新章节开始更新
-                        text = chapter[1] + fq.getText(chapter[0])
-                        cc.append(text)
-                        self.statusbar_shelf_1.show_message('已更新：《{}》 {}\t字数：{}'.format(book['bookName'], chapter[1], len(text)))
-                        # 保存
-                        if i % 5 == 0:
-                            shelfManager.getBookPath(book).write(cc)
-                            shelfManager.update()
-                    shelfManager.getBookPath(book).write(cc)  # 保存
-                    shelfManager.update()
+            book = shelfManager.getBookByIndex(index)
+            if book['src'].isdigit():  # 书籍来源为city，可更新
+                chapters = fq.getChapters(book['src'])  # 章节id + 章节标题 的列表
+                cc = shelfManager.getBookChapters(book)  # 本地的章节列表
+                for i, chapter in enumerate(chapters[len(cc):]):  # 从最新章节开始更新
+                    text = chapter[1] + fq.getText(chapter[0])
+                    cc.append(text)
+                    self.statusbar_shelf_1.show_message(
+                        '已更新：《{}》 {}\t字数：{}'.format(book['bookName'], chapter[1], len(text)))
+                    # 保存
+                    if i % 5 == 0:
+                        shelfManager.getBookPath(book).write(cc)
+                        shelfManager.update()
+                shelfManager.getBookPath(book).write(cc)  # 保存
+                shelfManager.update()
             self.statusbar_shelf_1.show_message('已全部更新完毕')
             self.show_shelf()
 
