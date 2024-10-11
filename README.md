@@ -4,7 +4,7 @@
 ## 一、项目概述
 novelManager 是一款集成书架管理、书籍下载以及小说阅读功能的工具。
 
-**特别鸣谢**：感谢 wqqxxx 对 1.4 版本 tkinterGUI 部分的 contribute
+**特别鸣谢**：感谢 wqqxxx 对 1.4.0 版本 `main_tk.py` 的 contribute
 
 ## 二、环境要求与启动方式
 1. 环境需求
