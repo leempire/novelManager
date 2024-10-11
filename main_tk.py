@@ -124,7 +124,12 @@ class App:
         self.bind()
         self.load()
 
+        for i in range(4):
+            self.table_shelf.add_col()
+            self.table_city.add_col()
+
         self.show_shelf()
+
 
         self.root.mainloop()
 
@@ -134,9 +139,8 @@ class App:
     def show_shelf(self):
         books = shelfManager.getShelf()
 
-        self.table_shelf.clear()
-        for i in range(4):
-            self.table_shelf.add_col()
+        for i in range(self.table_shelf.table_size[0]):
+            self.table_shelf.del_row(1)
         self.table_shelf.add_row(items=['bookName', 'author', 'wordNumber', 'chapterNumber'])
         for i, book in enumerate(books):
             self.table_shelf.add_row(items=[book['bookName'], book["author"], book["wordNumber"], book["chapterNumber"]])
@@ -148,9 +152,8 @@ class App:
             keywords = r.split(" ")
             books = shelfManager.search(' '.join(keywords))
 
-            self.table_shelf.clear()
-            for i in range(4):
-                self.table_shelf.add_col()
+            for i in range(self.table_shelf.table_size[0]):
+                self.table_shelf.del_row(1)
             self.table_shelf.add_row(items=['bookName', 'author', 'wordNumber', 'chapterNumber'])
             for i, book in enumerate(books):
                 self.table_shelf.add_row(items=[book['bookName'], book["author"], book["wordNumber"], book["chapterNumber"]])
@@ -191,9 +194,8 @@ class App:
         # books: [book1, book2, ...]
         # book: {'bookName', 'author', 'wordNumber', 'chapterNumber'}
 
-        self.table_city.clear()
-        for i in range(4):
-            self.table_city.add_col()
+        for i in range(self.table_city.table_size[0]):
+            self.table_city.del_row(1)
         self.table_city.add_row(items=['bookName', 'author', 'wordNumber', 'chapterNumber'])
 
         books = fq.search(keywords)
