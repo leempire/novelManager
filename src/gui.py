@@ -45,6 +45,7 @@ class Window:
         bot_cmd()
     """
 
+    title = 'novelManager'
     topButton = ('搜索',)
     labelWidth = (14, 10, 6, 6)  # list每列宽度
     labelAnchor = ('w', 'w', 'e', 'e')  # 对齐方式
@@ -80,7 +81,7 @@ class Window:
 
         font = Font(family="楷体", size=14)
         root.tk_setPalette(background=self.bg_color, foreground=self.fg_color)
-        root.title('iChat播放器')
+        root.title(self.title)
         self._pack_menu(root)
         body = Frame(root)
 
