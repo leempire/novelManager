@@ -4,16 +4,18 @@ import threading
 import time
 import webbrowser
 from .basic.record import Robot
+from .basic.fileManager import Path
+from . import dataPath
 
 
 def htmlReader(bookName, bookContent, chapter, exportPath, template='hreader'):
     """生成html阅读器"""
     # 读取阅读器模板
-    template = './html/{}.html'.format(template.replace('.html', ''))
-    if not os.path.exists(template):
+    template = template.replace('.html', '') + '.html'
+    template = Path(Path(dataPath).dirname) / 'html' / template
+    if not os.path.exists(str(template)):
         return '模板文件 {} 缺失，请检查'.format(template)
-    with open(template, encoding='utf-8') as f:
-        tmp = f.read()
+    tmp = template.read()
     # 渲染模板
     tmp = tmp.replace('//**novel**//', str(bookContent))
     tmp = tmp.replace('//**chapter**//', str(chapter))
