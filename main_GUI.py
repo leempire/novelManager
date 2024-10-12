@@ -59,10 +59,10 @@ class GUI(Window):
     # 按钮点击事件
     def menu_cmd(self, l1, l2=0):
         if l1 == 0:  # 书架
-            self.shelfShow()
+            self.show()
         elif l1 == 1:  # 操作
             if l2 == 0:  # 更新
-                self.cityUpdate()
+                self.update()
             elif l2 == 1:  # 导入
                 self.shelfAdd()
         elif l1 == 2:  # 配色
@@ -84,13 +84,13 @@ class GUI(Window):
             if action == 0:  # 阅读
                 self.hRead(index)
             elif action == 1:  # 删除
-                self.shelfRemove(index)
+                self.remove(index)
         elif self.mode == 'city':
             if action == 0:  # 添加
                 self.cityAdd(index)
 
     # 指令集
-    def shelfShow(self):
+    def show(self):
         shelfManager.getShelf()
         self.setButtonText(('阅读', '删除'))
         self.updateShelf()
@@ -102,7 +102,7 @@ class GUI(Window):
         shelfManager.search(entry)
         self.updateShelf()
 
-    def shelfRemove(self, index):
+    def remove(self, index):
         if askyesno('删除提示', '是否确认删除《{}》'.format(shelfManager.getBookByIndex(index)['bookName'])):
             remove(index)
             self.updateShelf()
@@ -110,6 +110,8 @@ class GUI(Window):
 
     def shelfAdd(self):
         path = askopenfilename(initialdir=shelfManager.importPath.path, filetypes=[('Text files', '*.txt')])
+        if not path:
+            return
         shelfAdd(path)
         self.updateShelf()
 
@@ -120,7 +122,7 @@ class GUI(Window):
         cityAdd(index)
         self.menu_cmd(0)  # 回到书架模式
 
-    def cityUpdate(self):
+    def update(self):
         threading.Thread(target=update, daemon=True).start()
         showinfo('提示', '正在更新从书城中添加的书籍，更新在后台进行并自动保存，您可以随时退出程序')
 
