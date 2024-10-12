@@ -1,6 +1,7 @@
 # 番茄小说爬虫，参考 https://github.com/ying-ck/fanqienovel-downloader
 from .basic.bug import Bug
 from .basic.fileManager import Path, readAndCreate
+from . import dataPath
 import random
 import json
 import time
@@ -40,7 +41,7 @@ class FQBug:
         search(key) -> [book1, ...] 关键字搜索
     """
 
-    def __init__(self):
+    def __init__(self, datapath=dataPath):
         """初始化请求头，获取cookie"""
         headers_lib = [
             {
@@ -51,7 +52,7 @@ class FQBug:
         ]
 
         self.headers = headers_lib[random.randint(0, len(headers_lib) - 1)]
-        self.cookiePath = Path('data/cookie.json')
+        self.cookiePath = Path(datapath) / 'cookie.json'
         self.cookie = readAndCreate(self.cookiePath, '')
         self.cookieInit = False
         self.books = []

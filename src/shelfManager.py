@@ -1,5 +1,6 @@
 from .basic.fileManager import Path, readAndCreate, sanitizeFilename, stringSimilar
 import os
+from . import dataPath
 
 
 class ShelfManager:
@@ -31,13 +32,14 @@ class ShelfManager:
         _checkIndex(index) -> index 将各种类型的索引进行转换
     """
 
-    def __init__(self, datapath='data'):
-        self.datapath = Path(datapath)
-        self.importPath = self.datapath / 'import'
-        self.exportPath = self.datapath / 'export'
-        self.storePath = self.datapath / 'store'
+    def __init__(self, datapath=dataPath):
+        # 正确指向 ./data/ 目录，无论程序在哪里启动
+        datapath = Path(datapath)
+        self.importPath = datapath / 'import'
+        self.exportPath = datapath / 'export'
+        self.storePath = datapath / 'store'
         # 书架
-        self.shelfPath = self.datapath / 'shelf.json'
+        self.shelfPath = datapath / 'shelf.json'
         self.shelf = readAndCreate(self.shelfPath, list())
         # 记录上一次显示的结果
         self.books = self.shelf

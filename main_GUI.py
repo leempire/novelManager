@@ -2,7 +2,7 @@ import threading
 from tkinter.filedialog import askopenfilename
 from tkinter.messagebox import askyesno, showinfo
 
-from orderRegister import shelfManager, fq, hRead, shelfRemove, cityAdd, cityUpdate, shelfAdd, set_
+from orderRegister import shelfManager, fq, hRead, remove, cityAdd, update, shelfAdd, set_
 from src.gui import Window, askQuestion
 
 
@@ -104,7 +104,7 @@ class GUI(Window):
 
     def shelfRemove(self, index):
         if askyesno('删除提示', '是否确认删除《{}》'.format(shelfManager.getBookByIndex(index)['bookName'])):
-            shelfRemove(index)
+            remove(index)
             self.updateShelf()
             self.setPage(self.curPage)  # 如果删除之后页面变少，自动返回上一页
 
@@ -121,7 +121,7 @@ class GUI(Window):
         self.menu_cmd(0)  # 回到书架模式
 
     def cityUpdate(self):
-        threading.Thread(target=cityUpdate, daemon=True).start()
+        threading.Thread(target=update, daemon=True).start()
         showinfo('提示', '正在更新从书城中添加的书籍，更新在后台进行并自动保存，您可以随时退出程序')
 
     def citySearch(self):

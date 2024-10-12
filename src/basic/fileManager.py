@@ -32,7 +32,7 @@ def readAndCreate(path, default=None):
 class Path:
     def __init__(self, path):
         """初始化，输入文件相对/绝对路径"""
-        self.path = os.path.abspath(path)
+        self.path = os.path.abspath(str(path))
 
     @property
     def exists(self):

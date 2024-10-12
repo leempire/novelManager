@@ -2,6 +2,7 @@ from .basic.fileManager import Path, readAndCreate
 from .basic.orderAnalyser import OrderAnalyser
 from .gui import Window
 from .reader import Reader
+from . import dataPath
 
 
 class Setting:
@@ -13,8 +14,8 @@ class Setting:
         html阅读器模板
         GUI配色
     """
-    def __init__(self):
-        self.settingPath = Path('data/setting.json')
+    def __init__(self, datapath=dataPath):
+        self.settingPath = Path(datapath) / 'setting.json'
         self.defaultSetting = {
             'readSpeed': 10.0,
             'autoCls': 0,
