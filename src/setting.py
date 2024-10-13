@@ -18,9 +18,9 @@ class Setting:
         self.settingPath = Path(datapath) / 'setting.json'
         self.defaultSetting = {
             'readSpeed': 10.0,
-            'autoCls': 0,
+            'autoCls': 1,
             'hReadTemplate': 'hreader',
-            'color': 0,
+            'color': 2,
         }
         self.setting = readAndCreate(self.settingPath, dict())
         # 若键值缺失，使用默认值

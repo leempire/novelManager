@@ -2,7 +2,7 @@ import threading
 from tkinter.filedialog import askopenfilename
 from tkinter.messagebox import askyesno, showinfo
 
-from orderRegister import shelfManager, fq, hRead, remove, cityAdd, update, shelfAdd, set_
+from orderRegister import shelfManager, fq, hRead, remove, update, set_, import_, add
 from src.gui import Window, askQuestion
 
 
@@ -90,16 +90,18 @@ class GUI(Window):
                 self.cityAdd(index)
 
     # 指令集
-    def show(self):
-        shelfManager.getShelf()
-        self.setButtonText(('阅读', '删除'))
-        self.updateShelf()
-        self.mode = 'shelf'
+    def add(self, index):
+        add(index)
+        self.menu_cmd(0)  # 回到书架模式
 
-    def shelfSearch(self):
-        entry = self.getEntry()
-        self.menu_cmd(0)
-        shelfManager.search(entry)
+    def hRead(self, index):
+        hRead(index)
+
+    def import_(self):
+        path = askopenfilename(initialdir=shelfManager.importPath.path, filetypes=[('Text files', '*.txt')])
+        if not path:
+            return
+        import_(path)
         self.updateShelf()
 
     def remove(self, index):
@@ -108,31 +110,29 @@ class GUI(Window):
             self.updateShelf()
             self.setPage(self.curPage)  # 如果删除之后页面变少，自动返回上一页
 
-    def shelfAdd(self):
-        path = askopenfilename(initialdir=shelfManager.importPath.path, filetypes=[('Text files', '*.txt')])
-        if not path:
-            return
-        shelfAdd(path)
-        self.updateShelf()
-
-    def hRead(self, index):
-        hRead(index)
-
-    def cityAdd(self, index):
-        cityAdd(index)
-        self.menu_cmd(0)  # 回到书架模式
-
-    def update(self):
-        threading.Thread(target=update, daemon=True).start()
-        showinfo('提示', '正在更新从书城中添加的书籍，更新在后台进行并自动保存，您可以随时退出程序')
-
-    def citySearch(self):
+    def searchCity(self):
         entry = self.getEntry()
         fq.search(entry)
         self.setButtonText(('添加', '    ', '    '))
         self.updateCity()
         self.setPage(0)
         self.mode = 'city'
+
+    def searchShelf(self):
+        entry = self.getEntry()
+        self.menu_cmd(0)
+        shelfManager.search(entry)
+        self.updateShelf()
+
+    def show(self):
+        shelfManager.getShelf()
+        self.setButtonText(('阅读', '删除'))
+        self.updateShelf()
+        self.mode = 'shelf'
+
+    def update(self):
+        threading.Thread(target=update, daemon=True).start()
+        showinfo('提示', '正在更新从书城中添加的书籍，更新在后台进行并自动保存，您可以随时退出程序')
 
 
 g = GUI(0)

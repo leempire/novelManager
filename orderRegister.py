@@ -10,42 +10,26 @@ from src.shelfManager import ShelfManager
 
 # 指令解析
 rootOrder = OrderAnalyser()
-rootOrder.register('exit', '退出')(exit)
+rootOrder.register('exit', '安全退出程序')(exit)
 # 修改设置
 setting = Setting()
 # 书架
-shelfOrder = OrderAnalyser()
-rootOrder.register('shelf', 'shelf ...\n 书架指令集')(shelfOrder)
 shelfManager = ShelfManager()
 # 命令行阅读器
 reader = AutoReader(shelfManager.saveShelf)
 threading.Thread(target=reader.run, daemon=True).start()
-# 书城
-cityOrder = OrderAnalyser()
-rootOrder.register('city', 'city ...\n 书城指令集')(cityOrder)
+# 书城爬虫
 fq = FQBug()
 
 
-@cityOrder.register('add', 'city add [index]\n 将书城搜索的结果序号对应的书籍添加到书城\n keywords支持空格')
-def cityAdd(index):
+@rootOrder.register('add', 'add [index]\n 将书城搜索的结果序号对应的书籍添加到书城')
+def add(index):
     if type(index) == str:
         index = int(index) - 1
     if not 0 <= index < len(fq.books):
         return '序号错误，请先使用city search搜索后，再添加相应书籍'
     book = fq.books[index]
     return shelfManager.addFromCity(book)
-
-
-@cityOrder.register('search', 'city search [keywords]\n 在书城中关键字搜索')
-def citySearch(*keywords):
-    keywords = ' '.join(keywords)
-    # books: [book1, book2, ...]
-    # book: {'bookName', 'author', 'wordNumber', 'chapterNumber'}
-    books = fq.search(keywords)
-    result = ''
-    for i, book in enumerate(books):
-        result += '{}. {}\n'.format(i + 1, shelfManager.formatBook(book))
-    return result
 
 
 @rootOrder.register('export', 'export [index=None]\n'
@@ -88,6 +72,13 @@ def hRead(index, chapter=None):
     return result
 
 
+@rootOrder.register('import', 'import [bookName=all] [author=匿名]\n'
+                              ' 将要添加的书籍文件（bookName.txt）放入./data/import/目录下，执行命令后可导入到书架\n'
+                              ' bookName=all时，将 ./data/import/ 目录下所有文件添加到书架')
+def import_(bookName='all', author='匿名'):
+    return shelfManager.addFromFile(bookName, author)
+
+
 @rootOrder.register('read', 'read [index] [chapter=None]\n'
                             ' 使用shelf search/show 后，阅读index项书籍\n'
                             ' chapter取默认值时为当前阅读进度\n'
@@ -109,6 +100,22 @@ def remove(index):
     return '已删除：{}'.format(shelfManager.formatBook(book))
 
 
+@rootOrder.register('search', 'search [keywords] [scope=shelf]\n'
+                              ' 在scope范围内搜索关键字keywords\n'
+                              ' scope可选: city / shelf')
+def search(keywords, scope='shelf'):
+    if scope == 'city':
+        books = fq.search(keywords)
+    elif scope == 'shelf':
+        books = shelfManager.search(keywords)
+    else:
+        return '参数错误：scope只能选city/shelf'
+    result = ''
+    for i, book in enumerate(books):
+        result += '{}. {}\n'.format(i + 1, shelfManager.formatBook(book))
+    return result
+
+
 @rootOrder.register('set', 'set [key] [value]\n'
                            ' 修改默认设置，支持以下设置项\n'
                            ' readSpeed: float 命令行阅读器阅读速度（字/秒）\n'
@@ -121,24 +128,6 @@ def set_(key, value):
         return '已将 {} 项从 {} 修改为 {}'.format(key, p, n)
     else:
         return '{} 项不存在'.format(key)
-
-
-@shelfOrder.register('add', 'shelf add [bookName=all] [author=匿名]\n'
-                            ' 将要添加的书籍文件（bookName.txt）放入./data/import/目录下，执行命令后可添加到书架\n'
-                            ' bookName=all时，将 ./data/import/ 目录下所有文件添加到书架')
-def shelfAdd(bookName='all', author='匿名'):
-    return shelfManager.addFromFile(bookName, author)
-
-
-@shelfOrder.register('search', 'shelf search [keywords]\n 在书架内关键字搜索\n keywords支持空格')
-def shelfSearch(*keywords):
-    # books: [book1, book2, ...]
-    # book: {'bookName', 'author', 'wordNumber', 'chapterNumber', 'src', 'progress'}
-    books = shelfManager.search(' '.join(keywords))
-    result = ''
-    for i, book in enumerate(books):
-        result += '{}. {}\n'.format(i + 1, shelfManager.formatBook(book))
-    return result
 
 
 @rootOrder.register('show', 'show\n 显示书架所有书籍')

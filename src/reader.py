@@ -14,7 +14,7 @@ def htmlReader(bookName, bookContent, chapter, exportPath, template='hreader'):
     template = template.replace('.html', '') + '.html'
     template = Path(Path(dataPath).dirname) / 'html' / template
     if not os.path.exists(str(template)):
-        return '模板文件 {} 缺失，请检查'.format(template)
+        return '模板文件 {} 缺失，请检查文件是否存在，或使用 set hReadTemplate xx 修改模板文件'.format(template)
     tmp = template.read()
     # 渲染模板
     tmp = tmp.replace('//**novel**//', str(bookContent))
