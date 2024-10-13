@@ -215,13 +215,11 @@ update
 ```commandline
 # 查看书架所有书籍
 show
-# 在书架中查找《十日终焉》
-search 十日终焉
-# 使用命令行阅读器，阅读搜索到的第一个结果
+# 使用命令行阅读器，阅读十日终焉
 read 1
 # 按esc键退出阅读模式
 # 使用html阅读器，阅读十日终焉
-hread 十日终焉
+hread 十日终焉  # 除了直接输入索引值，也可以输入书名，自动搜索并使用匹配程度最高的结果
 ```
 ![](./fig/shelfDemo.gif)
 ![hread界面](./fig/hreadDemo.png)
