@@ -1,7 +1,8 @@
 # 注册指令，每个函数上面的 @... 的第二个参数为函数功能说明
+import os
 import threading
 from sys import exit
-
+from src import dataPath
 from src.basic.orderAnalyser import OrderAnalyser
 from src.fqBug import FQBug
 from src.reader import AutoReader, htmlReader
@@ -77,6 +78,11 @@ def hRead(index, chapter=None):
                               ' bookName=all时，将 ./data/import/ 目录下所有文件添加到书架')
 def import_(bookName='all', author='匿名'):
     return shelfManager.addFromFile(bookName, author)
+
+
+@rootOrder.register('open', 'open\n 打开数据文件夹')
+def open_():
+    os.startfile(str(dataPath))
 
 
 @rootOrder.register('read', 'read [index] [chapter=None]\n'

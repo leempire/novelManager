@@ -2,13 +2,13 @@ import threading
 from tkinter.filedialog import askopenfilename
 from tkinter.messagebox import askyesno, showinfo
 
-from orderRegister import shelfManager, fq, hRead, remove, update, set_, import_, add
+from orderRegister import shelfManager, fq, hRead, remove, update, set_, import_, add, open_
 from src.gui import Window, askQuestion
 
 
 class GUI(Window):
     topButton = ('搜索',)
-    menu = ('书架', ('操作', '更新', '导入'), ('配色', '活力橙', '暗夜黑', '经典白', '靛紫青'))
+    menu = ('书架', ('操作', '更新', '导入', '数据'), ('配色', '活力橙', '暗夜黑', '经典白', '靛紫青'))
     buttonNum = 2
     lineNum = 10
     labelWidth = (16, 12, 7, 10)
@@ -64,7 +64,9 @@ class GUI(Window):
             if l2 == 0:  # 更新
                 self.update()
             elif l2 == 1:  # 导入
-                self.shelfAdd()
+                self.import_()
+            elif l2 == 2:  # 数据
+                self.open_()
         elif l1 == 2:  # 配色
             set_('color', l2)
             showinfo('提示', '配色已修改，下次启动时生效')
@@ -74,9 +76,9 @@ class GUI(Window):
         if action == 0:
             mode = askQuestion('提示', '请选择搜索范围', ['书架', '书城'])
             if mode == '书架':
-                self.shelfSearch()
+                self.searchShelf()
             elif mode == '书城':
-                self.citySearch()
+                self.searchCity()
 
     def mid_cmd(self, action, index):
         index += self.curPage * self.lineNum
@@ -87,7 +89,7 @@ class GUI(Window):
                 self.remove(index)
         elif self.mode == 'city':
             if action == 0:  # 添加
-                self.cityAdd(index)
+                self.add(index)
 
     # 指令集
     def add(self, index):
@@ -103,6 +105,9 @@ class GUI(Window):
             return
         import_(path)
         self.updateShelf()
+
+    def open_(self):
+        open_()
 
     def remove(self, index):
         if askyesno('删除提示', '是否确认删除《{}》'.format(shelfManager.getBookByIndex(index)['bookName'])):

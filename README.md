@@ -125,6 +125,7 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
   - shelf search -> search
   - city search -> search
 - 修改了部分设置的默认值
+- 增加了`open`指令，打开数据文件夹
 
 
 </details>
@@ -165,6 +166,8 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
   - 参数说明：
     - `bookName`：要添加的书籍文件名（需将文件放入`./data/import/`目录下），当`bookName=all`时，添加该目录下所有文件。
     - `author`：默认为匿名。 
+- `open`
+  - 功能：打开数据文件夹
 - `remove [index]`
   - 功能：从书架中删除书籍。 
   - 参数说明：
