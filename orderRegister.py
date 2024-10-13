@@ -83,6 +83,7 @@ def import_(bookName='all', author='匿名'):
 @rootOrder.register('open', 'open\n 打开数据文件夹')
 def open_():
     os.startfile(str(dataPath))
+    return '已打开数据文件夹'
 
 
 @rootOrder.register('read', 'read [index] [chapter=None]\n'
