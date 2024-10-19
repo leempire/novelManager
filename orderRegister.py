@@ -33,11 +33,14 @@ def add(index):
     return shelfManager.addFromCity(book)
 
 
-@rootOrder.register('content', 'content [index] [beg=1] [end=100]\n 查看书籍目录（从第beg章到end章）')
-def content(index, beg='1', end='100'):
+@rootOrder.register('content', 'content [index] [beg=1] [len=20]\n'
+                               ' 查看书籍目录\n'
+                               ' 目录范围为第`beg`章开始往后`len`章')
+def content(index, beg='1', len_='20'):
     book = shelfManager.getBookByIndex(index)
     c = shelfManager.getBookContent(book)
-    c = '\n'.join(c[int(beg) - 1:int(end)])
+    beg, len_ = int(beg), int(len_)
+    c = '\n'.join(c[beg - 1:beg - 1 + len_])
     return c
 
 
