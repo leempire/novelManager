@@ -145,6 +145,11 @@ class ShelfManager:
         """获取book的所有章节，列表形式"""
         return readAndCreate(self.getBookPath(book), [])
 
+    def getBookContent(self, book):
+        chapters = self.getBookChapters(book)
+        content = [chapter[:chapter.find('\n')] for chapter in chapters]
+        return content
+
     def getShelf(self):
         """获取书架全部信息"""
         self.books = self.shelf

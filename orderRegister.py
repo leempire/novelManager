@@ -33,6 +33,14 @@ def add(index):
     return shelfManager.addFromCity(book)
 
 
+@rootOrder.register('content', 'content [index] [beg=1] [end=100]\n 查看书籍目录（从第beg章到end章）')
+def content(index, beg='1', end='100'):
+    book = shelfManager.getBookByIndex(index)
+    c = shelfManager.getBookContent(book)
+    c = '\n'.join(c[int(beg) - 1:int(end)])
+    return c
+
+
 @rootOrder.register('export', 'export [index=None]\n'
                               ' 使用 shelf search/show 后，将index项导出到 ./data/export/ 文件夹\n'
                               ' index取默认值时导出全部书籍\n'
@@ -103,8 +111,12 @@ def read(index, chapter=None):
                               ' 使用 shelf search/show 后，在书架中删除index项\n'
                               ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
 def remove(index):
-    book = shelfManager.remove(index)
-    return '已删除：{}'.format(shelfManager.formatBook(book))
+    book = shelfManager.getBookByIndex(index)
+    if input('是否确认删除《{}》（Y/N）'.format(book['bookName'])).lower() == 'y':
+        book = shelfManager.remove(index)
+        return '已删除：{}'.format(shelfManager.formatBook(book))
+    else:
+        return '取消删除'
 
 
 @rootOrder.register('search', 'search [keywords] [scope=shelf]\n'
@@ -158,6 +170,7 @@ def update():
         if book['src'].isdigit():  # 书籍来源为city，可更新
             chapters = fq.getChapters(book['src'])  # 章节id + 章节标题 的列表
             cc = shelfManager.getBookChapters(book)  # 本地的章节列表
+            print('正在更新《{}》，发现{}个新章节'.format(book['bookName'], len(chapters) - len(cc)))
             for i, chapter in enumerate(chapters[len(cc):]):  # 从最新章节开始更新
                 text = chapter[1] + fq.getText(chapter[0])
                 cc.append(text)
