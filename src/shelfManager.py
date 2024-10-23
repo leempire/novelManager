@@ -1,3 +1,5 @@
+# 书架管理类，用于书架上书籍的增删查改
+
 from .basic.fileManager import Path, readAndCreate, sanitizeFilename, stringSimilar
 import os
 from . import dataPath

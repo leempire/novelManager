@@ -1,3 +1,5 @@
+# GUI模式
+
 import threading
 from tkinter.filedialog import askopenfilename
 from tkinter.messagebox import askyesno, showinfo

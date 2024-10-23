@@ -1,3 +1,5 @@
+# GUI模式，contributed by wqqxxx
+
 import threading
 from sys import exit
 from tkinter import Tk, Frame, Button, Scrollbar, Entry

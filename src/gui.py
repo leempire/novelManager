@@ -1,3 +1,5 @@
+# GUI模式的控制文件
+
 from tkinter import *
 from tkinter.font import Font
 
