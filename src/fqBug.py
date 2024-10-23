@@ -1,4 +1,6 @@
 # 番茄小说爬虫，参考 https://github.com/ying-ck/fanqienovel-downloader
+# author: leempire
+
 from .basic.bug import Bug
 from .basic.fileManager import Path, readAndCreate
 from . import dataPath

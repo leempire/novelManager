@@ -1,4 +1,6 @@
 # 注册指令，每个函数上面的 @... 的第二个参数为函数功能说明
+# author: leempire
+
 import os
 import threading
 from sys import exit

@@ -1,4 +1,5 @@
 # 设置模块，用来修改阅读速度等
+# author: leempire
 
 from .basic.fileManager import Path, readAndCreate
 from .basic.orderAnalyser import OrderAnalyser

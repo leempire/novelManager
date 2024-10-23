@@ -1,4 +1,5 @@
 # 书架管理类，用于书架上书籍的增删查改
+# author: leempire
 
 from .basic.fileManager import Path, readAndCreate, sanitizeFilename, stringSimilar
 import os

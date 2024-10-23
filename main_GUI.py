@@ -1,4 +1,5 @@
 # GUI模式
+# author: leempire
 
 import threading
 from tkinter.filedialog import askopenfilename

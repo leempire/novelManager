@@ -1,4 +1,5 @@
 # GUI模式，contributed by wqqxxx
+# author: wqqxxx
 
 import threading
 from sys import exit

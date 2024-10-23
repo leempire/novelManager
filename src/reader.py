@@ -1,4 +1,6 @@
 # 小说阅读器，提供暂停、调速、切换章节功能
+# author: leempire
+
 import os
 import threading
 import time
