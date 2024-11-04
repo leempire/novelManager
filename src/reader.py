@@ -9,11 +9,7 @@ import sys
 from .basic import windows
 from .basic.fileManager import Path
 from . import dataPath
-
-if windows:  # windows系统
-    from .basic.record import Robot
-else:  # 其他系统
-    Robot = object
+from .basic.record import Robot
 
 
 def htmlReader(bookName, bookContent, chapter, exportPath, template='hreader'):
@@ -113,7 +109,7 @@ class Reader:
 
     def lastChapter(self):
         self.setProgress(self.curChapter - 1, 0)
-        print()
+        print('\n')
 
     def loadNovel(self, book, novel, curChapter=0, curWord=0):
         """将小说正文加载到缓冲区"""
@@ -126,7 +122,7 @@ class Reader:
 
     def nextChapter(self):
         self.setProgress(self.curChapter + 1, 0)
-        print()
+        print('\n')
 
     def setProgress(self, curChapter=None, curWord=None):
         if curChapter is not None:
@@ -178,7 +174,7 @@ class AutoReader(Robot):
         self.reader = Reader()
         self.on = False
         # 只检测键盘操作
-        super().__init__(tick=20, mouse_move=0, mouse_click=0, mouse_scroll=0, key=1, wait=0)
+        super().__init__(tick=20)
 
     def getProgress(self):
         """获取当前阅读进度"""

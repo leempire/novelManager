@@ -133,7 +133,7 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 
 **版本1.4.7（2024-11-4）**
 - 对macOS做了兼容性修改
-  - 取消了macOS上的`read`命令。
+  - 修改了`read`相关库的支持。
   - 修改了`autoCls`在macOS上的逻辑。
 
 </details>
