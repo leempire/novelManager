@@ -5,6 +5,7 @@ import os
 import threading
 from sys import exit
 from src import dataPath
+from src.basic import windows
 from src.basic.orderAnalyser import OrderAnalyser
 from src.fqBug import FQBug
 from src.reader import AutoReader, htmlReader
@@ -19,8 +20,9 @@ setting = Setting()
 # 书架
 shelfManager = ShelfManager()
 # 命令行阅读器
-reader = AutoReader(shelfManager.saveShelf)
-threading.Thread(target=reader.run, daemon=True).start()
+if windows:  # 仅在windows系统下开启
+    reader = AutoReader(shelfManager.saveShelf)
+    threading.Thread(target=reader.run, daemon=True).start()
 # 书城爬虫
 fq = FQBug()
 
@@ -104,6 +106,8 @@ def open_():
                             ' chapter取默认值时为当前阅读进度\n'
                             ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
 def read(index, chapter=None):
+    if not windows:  # 阅读器不可用
+        return '当前系统非windows，命令行阅读器不可用，请使用hread替代'
     book = shelfManager.getBookByIndex(index)
     novel = shelfManager.getBookChapters(book)
     progress = book['progress'] if chapter is None else [int(chapter) - 1, 0]  # 阅读进度

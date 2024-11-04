@@ -5,9 +5,15 @@ import os
 import threading
 import time
 import webbrowser
-from .basic.record import Robot
+import sys
+from .basic import windows
 from .basic.fileManager import Path
 from . import dataPath
+
+if windows:  # windows系统
+    from .basic.record import Robot
+else:  # 其他系统
+    Robot = object
 
 
 def htmlReader(bookName, bookContent, chapter, exportPath, template='hreader'):

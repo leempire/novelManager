@@ -1,5 +1,6 @@
 # 命令解析、指令注册
 import os
+from . import windows
 
 
 class OrderAnalyser:
@@ -52,7 +53,10 @@ class OrderAnalyser:
         orders = order.split(' ')
 
         if isRoot and self.autoCls:  # 根指令，清空屏幕
-            os.system('cls')
+            if windows:
+                os.system('cls')
+            else:
+                os.system('clear')
             result += '>> ' + order + '\n'
 
         if len(orders) == 0:  # 空输入
