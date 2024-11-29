@@ -102,7 +102,7 @@ class FQBug:
         bug = Bug()
         bug.set_header(self.headers)
         bug.get('https://fanqienovel.com/reader/{}'.format(code))
-        text = bug.find('class="muye-reader-content noselect"').get_text('\r\t ', tag='\n')
+        text = bug.find('class="muye-reader-content noselect"').get_text('\r\t', tag='\n')
         while '\n\n' in text:
             text = text.replace('\n\n', '\n')
         text = strInterpreter(text, 0)
