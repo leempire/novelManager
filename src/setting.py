@@ -16,6 +16,7 @@ class Setting:
         自动清空命令行
         html阅读器模板
         GUI配色
+        导出位置
     """
     def __init__(self, datapath=dataPath):
         self.settingPath = Path(datapath) / 'setting.json'
@@ -24,6 +25,7 @@ class Setting:
             'autoCls': 1,
             'hReadTemplate': 'hreader',
             'color': 2,
+            'exportPath': './data/export/'
         }
         self.setting = readAndCreate(self.settingPath, dict())
         # 若键值缺失，使用默认值

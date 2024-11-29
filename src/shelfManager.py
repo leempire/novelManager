@@ -112,21 +112,23 @@ class ShelfManager:
             self.getBookPath(book).write(chapters)  # 解析到store文件夹
             return '已添加：' + self.formatBook(book)
 
-    def export(self, index=None):
+    def export(self, index=None, exportPath=None):
         """导出到export文件夹，为0时全部导出"""
         index = self._checkIndex(index)
+        exportPath = exportPath or self.exportPath
+        exportPath = Path(exportPath)
         if index is None:
             for book in self.shelf:
                 novel = self.getBookPath(book).read()
                 novel = '\n'.join(novel)
-                path = self.exportPath / (book['bookName'] + '.txt')
+                path = exportPath / (book['bookName'] + '.txt')
                 path.write(novel)
             return self.shelf
         else:
             target = self.books[index]
             novel = self.getBookPath(target).read()
             novel = '\n'.join(novel)
-            path = self.exportPath / (target['bookName'] + '.txt')
+            path = exportPath / (target['bookName'] + '.txt')
             path.write(novel)
             return target
 
