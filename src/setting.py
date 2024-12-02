@@ -3,7 +3,12 @@
 
 from .basic.fileManager import Path, readAndCreate
 from .basic.orderAnalyser import OrderAnalyser
-from .gui import Window
+try:
+    from .gui import Window
+except Exception:
+    print('GUI界面初始化失败！')
+    class Window:
+        color = None
 from .reader import Reader
 from . import dataPath
 

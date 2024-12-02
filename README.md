@@ -143,8 +143,9 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 - 优化了爬虫模块，提高了稳定性。
 - 新增`quit`命令，功能与`exit`相同，退出程序。
 
-**版本1.4.8**
-- 
+**版本1.4.9**
+- 修复了linux系统下无法运行的bug
+- 增加了`run`命令，可运行脚本文件
 
 </details>
 
@@ -174,6 +175,11 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
     - 使用`shelf search`/`show`后，根据`index`阅读对应书籍。
     - 当`index`非数字时，使用搜索到匹配程度最高的结果作为目标。
     - `chapter`：默认为当前阅读进度。
+- `run [filepath] [var1=None] ...`
+  - 功能：执行脚本文件中的命令。
+  - 参数说明：
+    - `filepath`为脚本文件的路径，脚本的编写参考`script_template.st`文件。
+    - 后续的参数将作为变量值，替换脚本文件中的`$var1`, `$var2`等变量。
 - `help [orderName=help]`
   - 功能：查看`orderName`指令的帮助，支持长指令如`help shelf search`。
 - `hread [index] [chapter=None]`
