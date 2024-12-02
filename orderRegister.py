@@ -10,6 +10,7 @@ from src.fqBug import FQBug
 from src.reader import AutoReader, htmlReader
 from src.setting import Setting
 from src.shelfManager import ShelfManager
+from src.runScript import RunScript
 
 # 指令解析
 rootOrder = OrderAnalyser()
@@ -24,6 +25,8 @@ reader = AutoReader(shelfManager.saveShelf)
 threading.Thread(target=reader.run, daemon=True).start()
 # 书城爬虫
 fq = FQBug()
+# 脚本执行器
+runScript = RunScript(handler=rootOrder)
 
 
 @rootOrder.register('add', 'add [index]\n 将书城搜索的结果序号对应的书籍添加到书城')
@@ -124,6 +127,11 @@ def remove(index):
         return '已删除：{}'.format(shelfManager.formatBook(book))
     else:
         return '取消删除'
+
+
+@rootOrder.register('run', 'run [filepath] [var1=None] ...\n 执行 filepath 脚本文件，并指定变量值')
+def run(filepath, *args):
+    runScript(filepath, args)
 
 
 @rootOrder.register('search', 'search [keywords] [scope=shelf]\n'
