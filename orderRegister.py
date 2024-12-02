@@ -14,6 +14,7 @@ from src.shelfManager import ShelfManager
 # 指令解析
 rootOrder = OrderAnalyser()
 rootOrder.register('exit', '安全退出程序')(exit)
+rootOrder.register('quit', '安全退出程序')(exit)
 # 修改设置
 setting = Setting()
 # 书架
