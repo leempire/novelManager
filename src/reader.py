@@ -9,7 +9,16 @@ import sys
 from .basic import windows
 from .basic.fileManager import Path
 from . import dataPath
-from .basic.record import Robot
+try:
+    from .basic.record import Robot
+except Exception:
+    print('命令行阅读器初始化失败！')
+    class Robot:
+        def __init__(*args, **kwargs):
+            ...
+
+        def run(*args):
+            ...
 
 
 def htmlReader(bookName, bookContent, chapter, exportPath, template='hreader'):
