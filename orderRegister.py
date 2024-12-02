@@ -141,18 +141,25 @@ def search(keywords, scope='shelf'):
     return result
 
 
-@rootOrder.register('set', 'set [key] [value]\n'
-                           ' 修改默认设置，支持以下设置项\n'
+@rootOrder.register('set', 'set [key=None] [value=None]\n'
+                           ' 修改默认设置，若不传入参数，返回当前设置，支持以下设置项\n'
                            ' readSpeed: float 命令行阅读器阅读速度（字/秒）\n'
                            ' autoCls: 0/1 是否开启命令行自动刷新\n'
                            ' hReadTemplate: html阅读器模板，输入 ./html/ 文件夹下的文件名\n'
                            ' color: main_GUI的配色方案，可选0~3，分别对应活力橙, 暗夜黑, 经典白, 靛紫青')
-def set_(key, value):
-    if key in setting:
+def set_(key=None, value=None):
+    if key is None:
+        txt = ''
+        for k in setting:
+            txt += ' {}: {}\n'.format(k, setting[k])
+        return txt
+    elif value is None:
+        return '{}: {}\n'.format(key, setting[key])
+    elif key in setting:
         p, n = setting.set(key, value)
-        return '已将 {} 项从 {} 修改为 {}'.format(key, p, n)
+        return '已将 {} 项从 {} 修改为 {}\n'.format(key, p, n)
     else:
-        return '{} 项不存在'.format(key)
+        return '{} 项不存在\n'.format(key)
 
 
 @rootOrder.register('show', 'show\n 显示书架所有书籍')

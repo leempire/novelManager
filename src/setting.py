@@ -54,3 +54,7 @@ class Setting:
 
     def __contains__(self, item):
         return item in self.setting
+    
+    def __iter__(self):
+        for key in self.setting:
+            yield key
