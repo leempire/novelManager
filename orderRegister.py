@@ -112,9 +112,12 @@ def read(index, chapter=None):
     book = shelfManager.getBookByIndex(index)
     novel = shelfManager.getBookChapters(book)
     progress = book['progress'] if chapter is None else [int(chapter) - 1, 0]  # 阅读进度
-    reader.loadNovel(book, novel, *progress)
-    reader.switch(True)
-    return '已开启命令行阅读模式'
+    try:
+        reader.loadNovel(book, novel, *progress)
+        reader.switch(True)
+        return '已开启命令行阅读模式'
+    except ValueError:
+        return '该书籍为空，无法阅读'
 
 
 @rootOrder.register('remove', 'remove [index]\n'
@@ -131,7 +134,7 @@ def remove(index):
 
 @rootOrder.register('run', 'run [filepath] [var1=None] ...\n 执行 filepath 脚本文件，并指定变量值')
 def run(filepath, *args):
-    runScript(filepath, args)
+    return runScript(filepath, args)
 
 
 @rootOrder.register('search', 'search [keywords] [scope=shelf]\n'

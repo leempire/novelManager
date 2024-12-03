@@ -142,7 +142,10 @@ class Reader:
         if curWord is not None:
             # 自动修正合法范围
             curWord = max(0, curWord)
-            curWord = min(curWord, len(self.novel[curChapter]))
+            if self.novel:
+                curWord = min(curWord, len(self.novel[curChapter]))
+            else:
+                curWord = 0
             self.pin = self.curWord = curWord
 
     def setReading(self, reading=None):
@@ -179,7 +182,7 @@ class AutoReader(Robot):
     """
 
     def __init__(self, saveFun):
-        self.saveFUn = saveFun
+        self.saveFun = saveFun
         self.reader = Reader()
         self.on = False
         # 只检测键盘操作
@@ -210,9 +213,9 @@ class AutoReader(Robot):
                     self.reader.forward()
                 elif key == 'esc':  # 退出阅读模式
                     self.switch(False)
-                    self.saveFUn()
+                    self.saveFun()
                     print('\n已退出阅读模式，进度已保存')
-                    print('=' * 50)
+                    print('=' * os.get_terminal_size()[0])
 
     def setProgress(self, curChapter=None, curWord=None):
         self.reader.setProgress(curChapter, curWord)

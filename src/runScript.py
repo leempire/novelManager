@@ -3,16 +3,24 @@ class RunScript:
         self.handler = handler
 
     def __call__(self, filepath, args):
+        if not filepath.endswith('.st'):
+            filepath += '.st'
         with open(filepath, encoding='utf-8') as f:
             content = f.read()
         for i in range(len(args)):
-            content = content.replace(f'$var{i}', args[i])
+            content = content.replace(f'$var{i + 1}', args[i])
             
-        orders = self.analyse(content)
+        orders = self._analyse(content)
+        result = ''
         for order in orders:
-            self.handler(order)
+            tmp = self.handler(order)
+            if tmp[:2] != '>>':
+                result += f'>> {order}\n'
+            result += tmp
+        result = result[:result.rfind('\n=')]
+        return result
 
-    def analyse(self, content):
+    def _analyse(self, content):
         lines = []
         tmp = ''
         for line in content.split('\n'):
@@ -22,21 +30,8 @@ class RunScript:
             elif line[-1:] != '\\':  # 结束一行
                 tmp += line
                 if tmp:
-                    print(tmp)
                     lines.append(tmp)
                     tmp = ''
             else:  # 跨行命令
                 tmp += line[:-1].strip() + ' '
         return lines
-
-
-if __name__ == '__main__':
-    RunScript(lambda item: print(item)).analyse("""
-show
-insert a \\
-                                        b
-
-# ss
-                                        
-                                    asdg
-""")

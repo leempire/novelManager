@@ -23,15 +23,16 @@ class Setting:
         GUI配色
         导出位置
     """
-    def __init__(self, datapath=dataPath):
-        self.settingPath = Path(datapath) / 'setting.json'
-        self.defaultSetting = {
+    defaultSetting = {
             'readSpeed': 10.0,
             'autoCls': 1,
             'hReadTemplate': 'hreader',
             'color': 2,
             'exportPath': './data/export/'
         }
+
+    def __init__(self, datapath=dataPath):
+        self.settingPath = Path(datapath) / 'setting.json'
         self.setting = readAndCreate(self.settingPath, dict())
         # 若键值缺失，使用默认值
         for k in self.defaultSetting:
