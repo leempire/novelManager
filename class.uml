@@ -1,0 +1,211 @@
+# 《novelManager项目文档》
+
+## 一、用例模型
+### 1. 参与者
+- **用户**：使用novelManager工具进行书架管理、书籍下载、阅读等操作的人员。
+
+### 2. 用例
+- **管理书架**
+    - **添加书籍**：用户可以从本地文件或书城将书籍添加到书架，支持批量添加和单个添加。
+    - **删除书籍**：根据索引或搜索结果删除书架中的书籍，删除前有确认环节防止误删。
+    - **搜索书籍**：在书架内进行关键字搜索，支持空格分隔关键字，可查看搜索结果的目录。
+    - **显示书架书籍**：查看书架中的所有书籍信息，包括书名、作者、字数、章节数等。
+    - **导出书籍**：将书架中的书籍导出到指定路径，可选择全部导出或按索引导出单个书籍。
+- **下载书籍**
+    - **书城搜索**：通过关键字在书城中搜索书籍，获取搜索结果及相关信息。
+    - **更新书籍**：更新书架上从书城中添加的书籍，更新过程自动保存且可随时中断。
+- **阅读书籍**
+    - **命令行阅读**：使用命令行阅读器阅读书籍，支持快捷键操作，如控制阅读速度、切换章节、暂停/开始阅读、退出阅读模式等，阅读进度可保存。
+    - **网页阅读**：使用网页阅读器阅读书籍，阅读进度单独存储但与命令行阅读器进度可自动同步，阅读后会在指定文件夹生成html文件供下次直接打开阅读。
+- **设置参数**
+    - **修改设置**：用户可以修改默认阅读速度、是否自动清空命令行、html阅读器模板、GUI配色方案等设置。
+    - **查看设置**：不传入参数时可查看当前所有设置项的值。
+- **打开文件夹**：打开数据文件夹，方便用户查看和管理相关数据文件。
+
+### 3. 用例图
+```plantuml
+@startuml
+left to right direction
+actor 用户
+
+rectangle novelManager {
+    usecase "添加书籍" as addBook
+    usecase "删除书籍" as removeBook
+    usecase "搜索书籍" as searchBook
+    usecase "显示书架书籍" as showBooks
+    usecase "导出书籍" as exportBook
+    usecase "书城搜索" as searchInCity
+    usecase "更新书籍" as updateBook
+    usecase "命令行阅读" as readInCLI
+    usecase "网页阅读" as readInWeb
+    usecase "修改设置" as modifySettings
+    usecase "查看设置" as viewSettings
+    usecase "打开文件夹" as openFolder
+}
+
+用户 --> addBook
+用户 --> removeBook
+用户 --> searchBook
+用户 --> showBooks
+用户 --> exportBook
+用户 --> searchInCity
+用户 --> updateBook
+用户 --> readInCLI
+用户 --> readInWeb
+用户 --> modifySettings
+用户 --> viewSettings
+用户 --> openFolder
+@enduml
+```
+
+## 二、顺序图
+### 1. 添加书籍到书架顺序图
+```plantuml
+@startuml
+actor 用户
+participant main as 主程序
+participant shelf as 书架模块
+participant importUtil as 导入工具
+
+用户 -> 主程序: 选择添加书籍（import）
+主程序 -> 书架模块: 调用添加书籍功能
+书架模块 -> 导入工具: 检查书籍文件格式并获取文件路径
+导入工具 -> 书架模块: 返回符合格式的文件路径列表
+书架模块 -> 书架模块: 将书籍信息添加到书架数据结构
+书架模块 -> 主程序: 返回添加成功信息
+主程序 -> 用户: 显示添加成功提示
+@enduml
+```
+
+### 2. 从书城下载书籍顺序图
+```plantuml
+@startuml
+actor 用户
+participant main as 主程序
+participant city as 书城模块
+participant spider as 爬虫模块
+
+用户 -> 主程序: 选择书城搜索（search [keywords] city）
+主程序 -> 书城模块: 调用搜索功能并传入关键字
+书城模块 -> 爬虫模块: 启动爬虫进行书城搜索
+爬虫模块 -> 书城模块: 返回搜索结果
+书城模块 -> 主程序: 传递搜索结果给主程序
+主程序 -> 用户: 显示搜索结果
+用户 -> 主程序: 选择添加搜索结果中的书籍（add [index]）
+主程序 -> 书城模块: 根据索引获取书籍信息并添加到书架
+书城模块 -> 书架模块: 将书籍信息添加到书架
+书架模块 -> 书城模块: 返回添加成功信息
+书城模块 -> 主程序: 传递添加成功信息
+主程序 -> 用户: 显示添加成功提示
+@enduml
+```
+
+### 3. 阅读书籍顺序图（以命令行阅读为例）
+```plantuml
+@startuml
+actor 用户
+participant main as 主程序
+participant reader as 阅读模块
+participant book as 书籍对象
+
+用户 -> 主程序: 选择命令行阅读（read [index] [chapter]）
+主程序 -> 阅读模块: 调用阅读功能并传入书籍索引和章节
+阅读模块 -> 书籍对象: 根据索引获取书籍内容
+书籍对象 -> 阅读模块: 返回指定章节的书籍内容
+阅读模块 -> 阅读模块: 初始化阅读界面和进度
+阅读模块 -> 用户: 显示书籍内容和阅读界面
+用户 -> 阅读模块: 使用快捷键操作（如切换章节、调整速度等）
+阅读模块 -> 书籍对象: 根据操作获取相应章节内容
+书籍对象 -> 阅读模块: 返回新章节内容
+阅读模块 -> 用户: 更新阅读界面显示新内容
+用户 -> 阅读模块: 按下esc键退出阅读模式
+阅读模块 -> 阅读模块: 保存阅读进度
+阅读模块 -> 主程序: 返回退出信息
+主程序 -> 用户: 显示退出阅读模式提示
+@enduml
+```
+
+## 三、类图
+### 1. 主要类及职责
+- **NovelManager**：主程序类，负责协调各个模块之间的交互，解析用户输入的指令并调用相应的功能模块执行操作。
+- **ShelfManager**：书架管理类，实现书架相关功能，如添加、删除、搜索、显示、导出书籍等操作，管理书架中的书籍数据结构（可能是列表或字典等）。
+- **CitySearcher**：书城搜索类，负责与爬虫模块交互，根据用户输入的关键字在书城中进行搜索，获取搜索结果并提供给书架管理类进行书籍添加等操作。
+- **Book**：书籍类，封装书籍的属性（如书名、作者、字数、章节数等）和方法（如获取指定章节内容等），代表书架中的一本具体书籍。
+- **ReaderCLI**：命令行阅读器类，实现命令行阅读模式的功能，包括显示书籍内容、处理用户快捷键操作、保存阅读进度等。
+- **ReaderWeb**：网页阅读器类，负责生成网页阅读界面，与书籍类交互获取内容并展示，管理网页阅读的进度和相关设置（如模板选择）。
+- **SettingsManager**：设置管理类，用于管理程序的各种设置项（阅读速度、自动清空命令行、html阅读器模板、GUI配色方案等），提供设置的获取、修改和保存功能。
+
+### 2. 类图
+```plantuml
+@startuml
+class NovelManager {
+    - shelfManager: ShelfManager
+    - citySearcher: CitySearcher
+    - readerCLI: ReaderCLI
+    - readerWeb: ReaderWeb
+    - settingsManager: SettingsManager
+    + run()
+    + parseCommand(command: str)
+}
+
+class ShelfManager {
+    - books: List[Book]
+    + addBook(book: Book)
+    + removeBook(index: int)
+    + searchBooks(keywords: str)
+    + showBooks()
+    + exportBooks(index: int)
+}
+
+class CitySearcher {
+    - spider: Spider
+    + searchInCity(keywords: str)
+}
+
+class Book {
+    - title: str
+    - author: str
+    - wordCount: int
+    - chapterCount: int
+    + getChapterContent(chapter: int)
+}
+
+class ReaderCLI {
+    - currentBook: Book
+    - currentChapter: int
+    - readingSpeed: int
+    + startReading(book: Book, chapter: int)
+    + handleKeyPress(key: str)
+    + saveProgress()
+}
+
+class ReaderWeb {
+    - currentBook: Book
+    - currentChapter: int
+    - template: str
+    + generateWebPage(book: Book, chapter: int)
+    + updateProgress()
+}
+
+class SettingsManager {
+    - settings: Dict[str, Any]
+    + getSetting(key: str)
+    + setSetting(key: str, value: Any)
+    + saveSettings()
+}
+
+class Spider {
+    + crawl(keywords: str)
+}
+
+NovelManager --> ShelfManager
+NovelManager --> CitySearcher
+NovelManager --> ReaderCLI
+NovelManager --> ReaderWeb
+NovelManager --> SettingsManager
+ShelfManager --> Book
+CitySearcher --> Spider
+ReaderCLI --> Book
+ReaderWeb --> Book
+@enduml
+```
