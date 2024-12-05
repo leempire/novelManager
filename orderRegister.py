@@ -56,14 +56,7 @@ def content(index, beg='1', len_='20'):
                               ' 当index非数字时，使用搜索到匹配程度最高的结果作为目标')
 def export(index=None):
     exportPath = setting['exportPath']
-    book = shelfManager.export(index, exportPath=exportPath)
-    if index is None:
-        result = ''
-        for b in book:
-            result += '已导出：{}\n'.format(shelfManager.formatBook(b))
-        result += f'请前往 {exportPath} 文件夹查看'
-    else:
-        result = '已导出：{}\n请前往 ./data/export/ 文件夹查看'.format(shelfManager.formatBook(book))
+    result = shelfManager.export(index, exportPath=exportPath)
     return result
 
 

@@ -118,19 +118,22 @@ class ShelfManager:
         exportPath = exportPath or self.exportPath
         exportPath = Path(exportPath)
         if index is None:
-            for book in self.shelf:
-                novel = self.getBookPath(book).read()
+            books = self.shelf
+        else:
+            books = [self.books[index]]
+        result = ''
+        for book in books:
+            novel = self.getBookPath(book)
+            if novel.exists:
+                novel = novel.read()
                 novel = '\n'.join(novel)
                 path = exportPath / (book['bookName'] + '.txt')
                 path.write(novel)
-            return self.shelf
-        else:
-            target = self.books[index]
-            novel = self.getBookPath(target).read()
-            novel = '\n'.join(novel)
-            path = exportPath / (target['bookName'] + '.txt')
-            path.write(novel)
-            return target
+                result += '已导出：{}\n'.format(self.formatBook(book))
+            else:
+                result += '导出失败：《{}》为空\n'.format(book['bookName'])
+        result += f'请前往 {exportPath} 文件夹查看'
+        return result
 
     def formatBook(self, book):
         """将book格式化为字符串"""
