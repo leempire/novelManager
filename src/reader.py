@@ -51,6 +51,7 @@ class Reader:
     方法：
         公有方法：
         forward() 快进5秒
+        getReading() 返回当前状态，是否正在阅读
         lastChapter() 回到上一章
         loadNovel(book, novel, curChapter=0, curWord=0) 将小说内容加载到缓冲区
         nextChapter() 下一章
@@ -115,6 +116,9 @@ class Reader:
     def forward(self):
         """快进5秒"""
         self.pin += self.speed * 5
+
+    def getReading(self):
+        return self.reading
 
     def lastChapter(self):
         self.setProgress(self.curChapter - 1, 0)
@@ -199,23 +203,26 @@ class AutoReader(Robot):
     def response_key(self, event, key, state):
         if self.on:
             if state == 'down':
-                if key == '-':
-                    self.reader.speedDown()
-                elif key == '=':
-                    self.reader.speedUp()
-                elif key == 'space':
+                # 暂停时只接受esc和space信号
+                if key == 'space':
                     self.reader.setReading()
-                elif key == 'right':
-                    self.reader.nextChapter()
-                elif key == 'left':
-                    self.reader.lastChapter()
-                elif key == 'down':
-                    self.reader.forward()
                 elif key == 'esc':  # 退出阅读模式
                     self.switch(False)
                     self.saveFun()
                     print('\n已退出阅读模式，进度已保存')
                     print('=' * os.get_terminal_size()[0])
+                # 以下的信号只有在阅读中才会触发
+                if self.reader.getReading():
+                    if key == '-':
+                        self.reader.speedDown()
+                    elif key == '=':
+                        self.reader.speedUp()
+                    elif key == 'right':
+                        self.reader.nextChapter()
+                    elif key == 'left':
+                        self.reader.lastChapter()
+                    elif key == 'down':
+                        self.reader.forward()
 
     def setProgress(self, curChapter=None, curWord=None):
         self.reader.setProgress(curChapter, curWord)
