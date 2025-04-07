@@ -22,13 +22,15 @@ class Setting:
         html阅读器模板
         GUI配色
         导出位置
+        下载小说使用的api序号
     """
     defaultSetting = {
             'readSpeed': 10.0,
             'autoCls': 1,
             'hReadTemplate': 'hreader',
             'color': 2,
-            'exportPath': './data/export/'
+            'exportPath': './data/export/',
+            'api': 0,
         }
 
     def __init__(self, datapath=dataPath):

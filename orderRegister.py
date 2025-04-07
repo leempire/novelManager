@@ -151,7 +151,8 @@ def search(keywords, scope='shelf'):
                            ' readSpeed: float 命令行阅读器阅读速度（字/秒）\n'
                            ' autoCls: 0/1 是否开启命令行自动刷新\n'
                            ' hReadTemplate: html阅读器模板，输入 ./html/ 文件夹下的文件名\n'
-                           ' color: main_GUI的配色方案，可选0~3，分别对应活力橙, 暗夜黑, 经典白, 靛紫青')
+                           ' color: main_GUI的配色方案，可选0~3，分别对应活力橙, 暗夜黑, 经典白, 靛紫青\n'
+                           ' api: 下载小说使用的api，可选0,1')
 def set_(key=None, value=None):
     if key is None:
         txt = ''
@@ -190,7 +191,7 @@ def update():
             cc = shelfManager.getBookChapters(book)  # 本地的章节列表
             print('正在更新《{}》，发现{}个新章节'.format(book['bookName'], len(chapters) - len(cc)))
             for i, chapter in enumerate(chapters[len(cc):]):  # 从最新章节开始更新
-                text = chapter[1] + fq.getText(chapter[0])
+                text = chapter[1] + fq.getText(chapter[0], api=setting['api'])
                 cc.append(text)
                 print('已更新：《{}》 {}\t字数：{}'.format(book['bookName'], chapter[1], len(text)))
                 # 保存

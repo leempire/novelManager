@@ -7,6 +7,7 @@ from . import dataPath
 import random
 import json
 import time
+from .fqAPI import API0, API1
 
 CODE = [[58344, 58715], [58345, 58716]]
 charset = json.loads(
@@ -30,103 +31,6 @@ def strInterpreter(n, mode):
             s += n[i]
     return s
 
-# class FQBug:
-#     """
-#     番茄小说爬虫，支持在书城中搜索书籍、下载书籍
-
-#     数据类型：
-#     book: dict类型，key: bookName, author, wordNumber, chapterNumber, bookId
-
-#     方法：
-#         getChapters(url) -> [[code, title], ...] 获取书籍章节目录，url可以为书籍id
-#         getText(code) -> text 获取code对应章节的正文
-#         search(key) -> [book1, ...] 关键字搜索
-#     """
-
-#     def __init__(self, datapath=dataPath):
-#         """初始化请求头，获取cookie"""
-#         headers_lib = [
-#             {
-#                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36'},
-#             {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0'},
-#             {
-#                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/93.0.4577.63 Safari/537.36 Edg/93.0.961.47'}
-#         ]
-
-#         self.headers = headers_lib[random.randint(0, len(headers_lib) - 1)]
-#         self.cookiePath = Path(datapath) / 'cookie.json'
-#         self.cookie = readAndCreate(self.cookiePath, '')
-#         self.cookieInit = False
-#         self.books = []
-
-#     def _getCookie(self, zj, t=0):
-#         """获取cookie"""
-#         bas = 1000000000000000000
-#         if t == 0:
-#             for i in range(random.randint(bas * 6, bas * 8), bas * 9):
-#                 time.sleep(random.randint(50, 150) / 1000)
-#                 self.cookie = 'novel_web_id=' + str(i)
-#                 if len(self.getText(zj, False)) > 200:
-#                     self.cookiePath.write(self.cookie)
-#                     return 's'
-#         else:
-#             self.cookie = t
-#             if len(self.getText(zj, False)) > 200:
-#                 return 's'
-#             else:
-#                 return 'err'
-
-#     def getCookie(self):
-#         if self._getCookie('7177386477654180387', self.cookie) == 'err':
-#             self._getCookie('7177386477654180387')
-
-#     def getChapters(self, url):
-#         """将书籍目录添加到书架，输入书籍的id或url"""
-#         url = str(url)
-#         if url[:4] != 'http':
-#             url = 'https://fanqienovel.com/page/' + url
-#         bug = Bug()
-#         bug.set_header(self.headers)
-#         bug.get(url)
-#         codes = []
-#         for a in bug.find('class="page-directory-content"').findall('<a'):
-#             codes.append([a['href'][8:], a.get_text()])
-#         return codes
-
-#     def getText(self, code, autoCookie=True):
-#         """获取code对应的章节正文"""
-#         if not self.cookieInit and autoCookie:
-#             self.getCookie()
-#             self.cookieInit = True
-#         self.headers['cookie'] = self.cookie
-#         bug = Bug()
-#         bug.set_header(self.headers)
-#         for _ in range(3):
-#             try:
-#                 bug.get('https://fanqienovel.com/reader/{}'.format(code))
-#             except Exception:
-#                 time.sleep(1)
-#         text = bug.find('class="muye-reader-content noselect"').get_text('\r\t', tag='\n')
-#         while '\n\n' in text:
-#             text = text.replace('\n\n', '\n')
-#         text = strInterpreter(text, 0)
-#         return text
-
-#     def search(self, key):
-#         """关键词搜索，返回最匹配的十个结果"""
-#         url = f"https://api5-normal-lf.fqnovel.com/reading/bookapi/search/page/v/?query={key}&aid=1967&channel=0&os_version=0&device_type=0&device_platform=0&iid=466614321180296&passback={{(page-1)*10}}&version_code=999"
-#         bug = Bug(url)
-#         books = json.loads(bug.text)['data']
-#         if books is None:
-#             self.books = []
-#         else:
-#             for i, book in enumerate(books):
-#                 book = book['book_data'][0]
-#                 books[i] = {'bookName': book['book_name'], 'author': book['author'], 'bookId': book['book_id'],
-#                             'wordNumber': int(book['word_number']), 'chapterNumber': int(book['serial_count'])}
-#             self.books = books
-#         return self.books
-
 
 class FQBug:
     """
@@ -147,14 +51,7 @@ class FQBug:
         self.cookie = readAndCreate(self.cookiePath, '')
         self.cookieInit = False
         self.books = []
-        self.api = [
-            "http://rehaofan.jingluo.love/content?item_id={}",
-            "http://yuefanqie.jingluo.love/content?item_id={}",
-            "http://apifq.jingluo.love/content?item_id={}",
-            "http://fan.jingluo.love/content?item_id={}",
-            "https://lsjk.zyii.xyz:3666/content?item_id={}",
-        ]
-        self.pin = 0
+        self.apis = [API0(), API1()]
         
     def getChapters(self, url):
         """将书籍目录添加到书架，输入书籍的id或url"""
@@ -168,28 +65,16 @@ class FQBug:
             codes.append([a['href'][8:], a.get_text()])
         return codes
 
-    def getText(self, code, autoCookie=True):
+    def getText(self, code, api):
         """获取code对应的章节正文"""
-        time.sleep(0.5)
-        for _ in range(5):
-            try:
-                bug = Bug()
-                bug.get(self.api[self.pin].format(code))
-                bug.text = json.loads(bug.text)['data']['content']
-
-                text = bug.find('<article>').get_text('\r\t', tag='\n')
-                while '\n\n' in text:
-                    text = text.replace('\n\n', '\n')
-                if len(text) < 100:
-                    raise ValueError
-                return text
-            except Exception:
-                print('当前节点失败，切换下载节点')
-                self.pin += 1
-        raise ValueError('下载失败')
+        content = self.apis[api].getText(code)
+        return content
 
     def search(self, key):
-        """关键词搜索，返回最匹配的十个结果"""
+        """
+        关键词搜索，返回最匹配的十个结果
+        {'bookName', 'author', 'bookId', 'wordNumber', 'chapterNumber'}
+        """
         url = f"https://api5-normal-lf.fqnovel.com/reading/bookapi/search/page/v/?query={key}&aid=1967&channel=0&os_version=0&device_type=0&device_platform=0&iid=466614321180296&passback={{(page-1)*10}}&version_code=999"
         bug = Bug(url)
         books = json.loads(bug.text)['data']
