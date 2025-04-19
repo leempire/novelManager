@@ -8,3 +8,4 @@ class APIBase:
 
 from .api0 import API0
 from .api1 import API1
+from .api2 import API2
