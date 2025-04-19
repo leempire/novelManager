@@ -7,7 +7,7 @@ from . import dataPath
 import random
 import json
 import time
-from .fqAPI import API0, API1
+from .fqAPI import API0, API1, API2
 
 CODE = [[58344, 58715], [58345, 58716]]
 charset = json.loads(
@@ -51,7 +51,7 @@ class FQBug:
         self.cookie = readAndCreate(self.cookiePath, '')
         self.cookieInit = False
         self.books = []
-        self.apis = [API0(), API1()]
+        self.apis = [API0(), API1(), API2()]
         
     def getChapters(self, url):
         """将书籍目录添加到书架，输入书籍的id或url"""
