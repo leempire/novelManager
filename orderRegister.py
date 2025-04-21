@@ -29,14 +29,21 @@ fq = FQBug()
 runScript = RunScript(handler=rootOrder)
 
 
-@rootOrder.register('add', 'add [index]\n 将书城搜索的结果序号对应的书籍添加到书城')
-def add(index):
-    if type(index) == str:
-        index = int(index) - 1
-    if not 0 <= index < len(fq.books):
-        return '序号错误，请先使用city search搜索后，再添加相应书籍'
-    book = fq.books[index]
-    return shelfManager.addFromCity(book)
+@rootOrder.register('add', 'add [index] (bookName=None) (author=无)\n' \
+                            ' 将书城搜索的结果序号对应的书籍添加到书城\n' \
+                            ' index为番茄小说的书籍id时，需指定bookName')
+def add(index, bookName=None, author='无'):
+    if len(index) == len('7263489983887969315'):  # 直接按照id添加
+        if bookName is None:
+            return '错误，未指定书名'
+        return shelfManager.addByID(index, bookName, author)
+    else:
+        if type(index) == str:
+            index = int(index) - 1
+        if not 0 <= index < len(fq.books):
+            return '序号错误，请先使用city search搜索后，再添加相应书籍'
+        book = fq.books[index]
+        return shelfManager.addFromCity(book)
 
 
 @rootOrder.register('content', 'content [index] [beg=1] [len=20]\n'

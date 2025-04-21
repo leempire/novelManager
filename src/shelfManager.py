@@ -71,6 +71,14 @@ class ShelfManager:
         else:
             raise ValueError
 
+    def addByID(self, book_id, name, author):
+        """按照book_id添加书籍"""
+        for b in self.shelf:
+            if name == b['bookName'] or book_id == b['src']:
+                return '添加失败，书籍已存在'
+        book = self._add(name, author, 0, 0, book_id)
+        return '已添加：' + self.formatBook(book)
+
     def addFromCity(self, book):
         """从city的搜索结果中添加书籍"""
         # 判断书籍是否已存在

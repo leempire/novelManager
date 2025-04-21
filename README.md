@@ -156,9 +156,11 @@ novelManager 是一款集成书架管理、书籍下载以及小说阅读功能�
 <details>
 <summary>点击展开</summary>
 
-- `add [index]`
+- `add [index] (bookName=None) (author=无)`
   - 功能：将书城搜索结果序号对应的书籍添加到书架。
-  - 参数说明：`index`为书城搜索结果的序号。
+  - 参数说明：
+    - `index`为书城搜索结果的序号。
+    - `index`为番茄小说的书籍id时，需指定`bookName`
 - `content [index] [beg=1] [len=20]`
   - 功能：查看书籍目录。
   - 参数说明：

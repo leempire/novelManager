@@ -1,2 +1,4 @@
 requests==2.32.3
 pynput==1.7.7
+fake_useragent==2.2.0
+pycryptodome==3.22.0
